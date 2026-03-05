@@ -1,0 +1,7 @@
+0.7
+2020.2
+Nov 18 2020
+09:47:47
+D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.sim/sim_1/behav/xsim/glbl.v,1605673889,verilog,,,,glbl,,uvm,,,,,,
+D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sim_1/new/tb_dedicated_cpu0.sv,1772689212,systemVerilog,,,,tb_dedicated_cpu0,,uvm,,,,,,
+D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sources_1/new/dedicated_cpu0.sv,1772689516,systemVerilog,,D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sim_1/new/tb_dedicated_cpu0.sv,,alu;areg;control_unit;datapath;dedicated_cpu0;mux_2X1,,uvm,,,,,,
