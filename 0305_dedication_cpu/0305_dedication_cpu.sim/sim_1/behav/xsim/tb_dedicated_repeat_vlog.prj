@@ -1,0 +1,10 @@
+# compile verilog/system verilog design source files
+sv xil_defaultlib  \
+"../../../../0305_dedication_cpu.srcs/sources_1/new/dedicated_cpu1_repeat.sv" \
+"../../../../0305_dedication_cpu.srcs/sim_1/new/tb_dedicated_repeat.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
