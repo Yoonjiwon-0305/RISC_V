@@ -2,7 +2,7 @@
 2020.2
 Nov 18 2020
 09:47:47
-D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.sim/sim_1/behav/xsim/glbl.v,1605673889,verilog,,,,glbl,,uvm,,,,,,
-D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sim_1/new/tb_dedicated_cpu0.sv,1772689212,systemVerilog,,,,tb_dedicated_cpu0,,uvm,,,,,,
-D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sim_1/new/tb_dedicated_repeat.sv,1772695007,systemVerilog,,,,tb_dedicated_repeat,,uvm,,,,,,
-D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sources_1/new/dedicated_cpu1_repeat.sv,1772694971,systemVerilog,,D:/workplace/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sim_1/new/tb_dedicated_repeat.sv,,alt10_compare;alu;areg;control_unit;datapath;dedicated_cpu1_repeat;mux_2X1,,uvm,,,,,,
+D:/Ondevice/RISC_V/RISC_V/0305_dedication_cpu/0305_dedication_cpu.sim/sim_1/behav/xsim/glbl.v,1772715068,verilog,,,,glbl,,uvm,,,,,,
+D:/Ondevice/RISC_V/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sim_1/new/tb_sum_cpu2.sv,1772720103,systemVerilog,,,,tb_sum_cpu2,,uvm,,,,,,
+D:/Ondevice/RISC_V/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sources_1/new/dedicated_cpu1_repeat.sv,1772715068,systemVerilog,,D:/Ondevice/RISC_V/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sources_1/new/sum_cpu2.sv,,alt10_compare;areg;dedicated_cpu1_repeat,,uvm,,,,,,
+D:/Ondevice/RISC_V/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sources_1/new/sum_cpu2.sv,1772722407,systemVerilog,,D:/Ondevice/RISC_V/RISC_V/0305_dedication_cpu/0305_dedication_cpu.srcs/sim_1/new/tb_sum_cpu2.sv,,alt11_compare;alu;control_unit;datapath;mux_2X1;register;sum_cpu2,,uvm,,,,,,
