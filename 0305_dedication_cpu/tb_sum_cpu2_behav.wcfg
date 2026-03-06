@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_sum_cpu2_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_sum_cpu2" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="278824fs"></ZoomEndTime>
+      <Cursor1Time time="289595fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="172"></NameColumnWidth>
+      <ValueColumnWidth column_width="58"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="12" />
+   <wvobject fp_name="/tb_sum_cpu2/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/reset" type="logic">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/out" type="array">
+      <obj_property name="ElementShortName">out[7:0]</obj_property>
+      <obj_property name="ObjectShortName">out[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_CONTROL_UNIT/current_state" type="array">
+      <obj_property name="ElementShortName">current_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">current_state[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_DATAPATH/U_SUM_REG/r_data" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">r_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">r_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="label">sum_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_CONTROL_UNIT/sumsrc_sel" type="logic">
+      <obj_property name="ElementShortName">sumsrc_sel</obj_property>
+      <obj_property name="ObjectShortName">sumsrc_sel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_CONTROL_UNIT/sum_load" type="logic">
+      <obj_property name="ElementShortName">sum_load</obj_property>
+      <obj_property name="ObjectShortName">sum_load</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_DATAPATH/U_A_REG/r_data" type="array">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">r_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">r_data[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="label">a_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_CONTROL_UNIT/asrc_sel" type="logic">
+      <obj_property name="ElementShortName">asrc_sel</obj_property>
+      <obj_property name="ObjectShortName">asrc_sel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_CONTROL_UNIT/a_load" type="logic">
+      <obj_property name="ElementShortName">a_load</obj_property>
+      <obj_property name="ObjectShortName">a_load</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_CONTROL_UNIT/alt11" type="logic">
+      <obj_property name="ElementShortName">alt11</obj_property>
+      <obj_property name="ObjectShortName">alt11</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_sum_cpu2/dut/U_CONTROL_UNIT/outsel" type="logic">
+      <obj_property name="ElementShortName">outsel</obj_property>
+      <obj_property name="ObjectShortName">outsel</obj_property>
+   </wvobject>
+</wave_config>
