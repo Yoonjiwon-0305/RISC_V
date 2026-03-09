@@ -106,6 +106,7 @@ module register_file (
         for (int i = 1; i < 32; i++) begin
             rf_reg[i] = i;
         end
+        rf_reg[27] = -16;
     end
 `endif
 
