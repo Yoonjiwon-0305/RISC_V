@@ -6,8 +6,16 @@
 `define R_TYPE 7'b011_0011
 `define S_TYPE 7'b010_0011
 `define IL_TYPE 7'b000_0011
-`define I_TYPE 7'b001_0011
+`define II_TYPE 7'b001_0011
 
+`define SB 3'b000
+`define SH 3'b001
+`define SW 3'b010
+`define LB 3'b000
+`define LH 3'b001
+`define LW 3'b010
+`define LBU 3'b100
+`define LHU 3'b101
 //R-TYPE instruction
 `define ADD 4'b0_000 //0
 `define SUB 4'b1_000 //8
