@@ -23,6 +23,7 @@ module RV32I_datapath (
     assign dwdata = w_rd2;
     logic btaken, branch_sel, w_or_jal;
     logic [31:0] w_jalr_out, w_auipc_out;
+    logic w_branch_and;
 
     program_counter U_PC (
         .clk(clk),
@@ -288,6 +289,7 @@ module program_counter (
 
     logic [31:0] w_pc_alu_result;
     logic [31:0] w_next_pc, w_branch_out;
+    logic [31:0] w_jalr_mux;
     assign w_next_pc = (reset) ? 32'd0 : w_pc_alu_result;
     assign jalr_out  = w_branch_out;
     assign auipc_out = w_pc_alu_result;
@@ -313,8 +315,8 @@ module program_counter (
     );
 
     mux_2x1 U_JALR_MUX (
-        .in0    (rs1_data),   //sel0
-        .in1    (pc),         //sel1
+        .in0    (pc),         //sel0
+        .in1    (rs1_data),   //sel1
         .mux_sel(jalr),
         .out_mux(w_jalr_mux)
     );
