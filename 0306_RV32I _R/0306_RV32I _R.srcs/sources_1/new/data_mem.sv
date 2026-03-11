@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-
+`include "define.vh"
 module data_mem (
     input               clk,
     input               dwe,

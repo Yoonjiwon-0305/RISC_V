@@ -19,7 +19,7 @@ module tb_RV32I ();
         @(negedge clk);
         reset = 0;
 
-        repeat (5) @(negedge clk);
+        repeat (11) @(negedge clk);
         $stop;
     end
 
