@@ -19,6 +19,9 @@ module RV32I_cpu (
     logic [4:0] w_alu_control;
     logic branch;
     logic branch_sel;
+    logic jal, jalr;
+    logic jalr_out, auipc_out;
+
 
     control_unit U_CONTROL_UNIT (
         .funct7     (instr_data[31:25]),
@@ -151,14 +154,14 @@ module control_unit (
                 o_funct3    = 3'b000;
                 dwe         = 1'b0;
             end
-            `AULPC_TYPE: begin
+            `AUIPC_TYPE: begin
                 rf_we       = 1'b1;
                 jal         = 1'b0;
                 jalr        = 1'b0;
                 alusrc      = 1'b1;
                 alu_control = `ADD;
                 branch      = 1'b0;
-                rfwdsrc_sel = 1'b0;
+                rfwdsrc_sel = 3'b011;
                 o_funct3    = 3'b011;
                 dwe         = 1'b0;
             end
@@ -169,7 +172,7 @@ module control_unit (
                 alusrc      = 1'b1;
                 alu_control = `ADD;
                 branch      = 1'b1;
-                rfwdsrc_sel = 1'b0;
+                rfwdsrc_sel = 3'b100;
                 o_funct3    = 3'b100;
                 dwe         = 1'b0;
             end
@@ -180,7 +183,7 @@ module control_unit (
                 alusrc      = 1'b1;
                 alu_control = `ADD;
                 branch      = 1'b1;
-                rfwdsrc_sel = 1'b0;
+                rfwdsrc_sel = 3'b100;
                 o_funct3    = 3'b100;
                 dwe         = 1'b0;
             end

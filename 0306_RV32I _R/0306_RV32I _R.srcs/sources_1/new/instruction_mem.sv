@@ -8,25 +8,24 @@ module instruction_mem (
     logic [31:0] rom[0:31];
 
     initial begin
-
-        //BEQ
-        rom[0]  = 32'h01ee5463;  //bge x28, x30, 8
-        rom[1]  = 32'h01ce5463;  //bge x28, x28, 8
-        rom[2]  = 32'h00c57493;  //andi x9, x10, 12
-        rom[3]  = 32'h00409293;  //slli x5, x1, 4
-        rom[4]  = 32'hfff00093;  //addi x1, x0, -1
-        rom[5]  = 32'h00409313;  //slli x6, x1, 4
-        rom[6]  = 32'h01be5863;  //bge x28, x27, 16
-        rom[7]  = 32'h00c57493;  //andi x9, x10, 12
-        rom[8]  = 32'h00b57493;  //andi x9, x10, 11
-        rom[9]  = 32'h00407193;  //andi x3, x0, 4
-        rom[10] = 32'h0040df93;  //srli x31, x1, 4
-        rom[11] = 32'h00345413;  //srli x8, x8, 3
-        rom[12] = 32'h40335313;  //srai x6, x6, 3
-        rom[13] = 32'h40295393;  //srai x7, x18, 2
+        rom[0] = 32'h00208ab3;  //add x21, x1, x2
+        rom[1] = 32'h40328b33;  //sub x22, x5, x3
+        rom[2] = 32'h00219bb3;  //sll x23, x3, x2
+        rom[3] = 32'h0057ac33;  //slt x24, x15, x5
+        rom[4] = 32'h0057bcb3;  //sltu x25, x15, x5
+        rom[5] = 32'h0053cd33;  //xor x26 x7 x5
+        rom[6] = 32'h00385db3;  //srl x27, x16, x3
+        rom[7] = 32'h40385e33;  //sra x28, x16, x3
+        rom[8] = 32'h0064eeb3;  //or x29, x9, x6
+        rom[9] = 32'h00a67f33;  //and x30, x12, x10
     end
+
+
 
     assign instr_data = rom[instr_addr[31:2]];
 
 endmodule
 
+
+
+// $readmemh("riscv_rv32i_data.mem",rom);

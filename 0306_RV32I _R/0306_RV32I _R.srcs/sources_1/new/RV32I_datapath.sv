@@ -94,9 +94,9 @@ module RV32I_datapath (
 endmodule
 
 module or_gate (
-    input  [31:0] a,
-    input  [31:0] b,
-    output [31:0] out
+    input  a,
+    input  b,
+    output out
 );
     assign out = a | b;
 endmodule
@@ -161,9 +161,10 @@ module imm_extender (
                     1'b0  // 0 (imm[0]은 항상 0)
                 };
             end
-            `LUI_TYPE: begin
+            `LUI_TYPE, `AUIPC_TYPE: begin
                 imm_out = {instr_data[31:12], 12'b0};
             end
+
             `JAL_TYPE: begin
                 imm_out = {
                     {12{instr_data[31]}},  // 31:21 (사인 확장)
@@ -198,7 +199,8 @@ module register_file (
         for (int i = 1; i < 32; i++) begin
             rf_reg[i] = i;
         end
-        rf_reg[27] = -16;
+        rf_reg[15] = -1;
+        rf_reg[16] = -16;
     end
 `endif
 
@@ -290,9 +292,9 @@ module program_counter (
     logic [31:0] w_pc_alu_result;
     logic [31:0] w_next_pc, w_branch_out;
     logic [31:0] w_jalr_mux;
-    assign w_next_pc = (reset) ? 32'd0 : w_pc_alu_result;
-    assign jalr_out  = w_branch_out;
-    assign auipc_out = w_pc_alu_result;
+    // assign w_next_pc = (reset) ? 32'd0 : w_pc_alu_result;
+    assign jalr_out  = w_pc_alu_result;
+    assign auipc_out = w_branch_out;
 
     register U_PC_REGISTER (
         .clk(clk),

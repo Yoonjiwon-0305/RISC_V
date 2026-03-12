@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="220001fs"></ZoomEndTime>
-      <Cursor1Time time="214953fs"></Cursor1Time>
+      <ZoomEndTime time="92619fs"></ZoomEndTime>
+      <Cursor1Time time="21309fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="158"></NameColumnWidth>
-      <ValueColumnWidth column_width="71"></ValueColumnWidth>
+      <ValueColumnWidth column_width="67"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="6" />
+   <WVObjectSize size="7" />
    <wvobject fp_name="/tb_RV32I/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -28,7 +28,7 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject fp_name="group530" type="group">
+   <wvobject fp_name="group6" type="group">
       <obj_property name="label">instr_mem</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
@@ -46,7 +46,7 @@
          <obj_property name="ObjectShortName">rom[0:31][31:0]</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="group541" type="group">
+   <wvobject fp_name="group43" type="group">
       <obj_property name="label">control_unit</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
@@ -84,6 +84,7 @@
       <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_CONTROL_UNIT/alu_control" type="array">
          <obj_property name="ElementShortName">alu_control[4:0]</obj_property>
          <obj_property name="ObjectShortName">alu_control[4:0]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_CONTROL_UNIT/branch" type="logic">
          <obj_property name="ElementShortName">branch</obj_property>
@@ -102,28 +103,28 @@
          <obj_property name="ObjectShortName">dwe</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="group569" type="group">
+   <wvobject fp_name="group45" type="group">
       <obj_property name="label">datapath</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
-      <wvobject fp_name="group574" type="group">
+      <wvobject fp_name="group46" type="group">
          <obj_property name="label">register_file</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/RA1" type="array">
             <obj_property name="ElementShortName">RA1[4:0]</obj_property>
             <obj_property name="ObjectShortName">RA1[4:0]</obj_property>
-            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/RA2" type="array">
             <obj_property name="ElementShortName">RA2[4:0]</obj_property>
             <obj_property name="ObjectShortName">RA2[4:0]</obj_property>
-            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/WA" type="array">
             <obj_property name="ElementShortName">WA[4:0]</obj_property>
             <obj_property name="ObjectShortName">WA[4:0]</obj_property>
-            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/wdata" type="array">
             <obj_property name="ElementShortName">wdata[31:0]</obj_property>
@@ -136,7 +137,7 @@
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rd1" type="array">
             <obj_property name="ElementShortName">rd1[31:0]</obj_property>
             <obj_property name="ObjectShortName">rd1[31:0]</obj_property>
-            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rd2" type="array">
             <obj_property name="ElementShortName">rd2[31:0]</obj_property>
@@ -155,12 +156,12 @@
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[1]" type="array">
                <obj_property name="ElementShortName">[1][31:0]</obj_property>
                <obj_property name="ObjectShortName">[1][31:0]</obj_property>
-               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[2]" type="array">
                <obj_property name="ElementShortName">[2][31:0]</obj_property>
                <obj_property name="ObjectShortName">[2][31:0]</obj_property>
-               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[3]" type="array">
                <obj_property name="ElementShortName">[3][31:0]</obj_property>
@@ -180,7 +181,7 @@
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[6]" type="array">
                <obj_property name="ElementShortName">[6][31:0]</obj_property>
                <obj_property name="ObjectShortName">[6][31:0]</obj_property>
-               <obj_property name="Radix">HEXRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[7]" type="array">
                <obj_property name="ElementShortName">[7][31:0]</obj_property>
@@ -195,7 +196,7 @@
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[9]" type="array">
                <obj_property name="ElementShortName">[9][31:0]</obj_property>
                <obj_property name="ObjectShortName">[9][31:0]</obj_property>
-               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[10]" type="array">
                <obj_property name="ElementShortName">[10][31:0]</obj_property>
@@ -230,27 +231,27 @@
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[16]" type="array">
                <obj_property name="ElementShortName">[16][31:0]</obj_property>
                <obj_property name="ObjectShortName">[16][31:0]</obj_property>
-               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[17]" type="array">
                <obj_property name="ElementShortName">[17][31:0]</obj_property>
                <obj_property name="ObjectShortName">[17][31:0]</obj_property>
-               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[18]" type="array">
                <obj_property name="ElementShortName">[18][31:0]</obj_property>
                <obj_property name="ObjectShortName">[18][31:0]</obj_property>
-               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[19]" type="array">
                <obj_property name="ElementShortName">[19][31:0]</obj_property>
                <obj_property name="ObjectShortName">[19][31:0]</obj_property>
-               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[20]" type="array">
                <obj_property name="ElementShortName">[20][31:0]</obj_property>
                <obj_property name="ObjectShortName">[20][31:0]</obj_property>
-               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
             </wvobject>
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[21]" type="array">
                <obj_property name="ElementShortName">[21][31:0]</obj_property>
@@ -305,34 +306,35 @@
             <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_REGISTER_FILE/rf_reg[31]" type="array">
                <obj_property name="ElementShortName">[31][31:0]</obj_property>
                <obj_property name="ObjectShortName">[31][31:0]</obj_property>
-               <obj_property name="Radix">HEXRADIX</obj_property>
+               <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
             </wvobject>
          </wvobject>
       </wvobject>
-      <wvobject fp_name="group575" type="group">
-         <obj_property name="label">imm_ex</obj_property>
+      <wvobject fp_name="group57" type="group">
+         <obj_property name="label">imm_e</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="isExpanded"></obj_property>
-         <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_IMM_EX/instr_data" type="array">
-            <obj_property name="ElementShortName">instr_data[31:0]</obj_property>
-            <obj_property name="ObjectShortName">instr_data[31:0]</obj_property>
-         </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_IMM_EX/imm_out" type="array">
             <obj_property name="ElementShortName">imm_out[31:0]</obj_property>
             <obj_property name="ObjectShortName">imm_out[31:0]</obj_property>
          </wvobject>
+         <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_IMM_EX/instr_data" type="array">
+            <obj_property name="ElementShortName">instr_data[31:0]</obj_property>
+            <obj_property name="ObjectShortName">instr_data[31:0]</obj_property>
+         </wvobject>
       </wvobject>
-      <wvobject fp_name="group576" type="group">
+      <wvobject fp_name="group58" type="group">
          <obj_property name="label">rf_mux</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_MUX_ALUSRC_RS2/in0" type="array">
             <obj_property name="ElementShortName">in0[31:0]</obj_property>
             <obj_property name="ObjectShortName">in0[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_MUX_ALUSRC_RS2/in1" type="array">
             <obj_property name="ElementShortName">in1[31:0]</obj_property>
             <obj_property name="ObjectShortName">in1[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_MUX_ALUSRC_RS2/mux_sel" type="logic">
             <obj_property name="ElementShortName">mux_sel</obj_property>
@@ -343,14 +345,14 @@
             <obj_property name="ObjectShortName">out_mux[31:0]</obj_property>
          </wvobject>
       </wvobject>
-      <wvobject fp_name="group577" type="group">
+      <wvobject fp_name="group63" type="group">
          <obj_property name="label">rf_alu</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_RF_ALU/rd1" type="array">
             <obj_property name="ElementShortName">rd1[31:0]</obj_property>
             <obj_property name="ObjectShortName">rd1[31:0]</obj_property>
-            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_RF_ALU/rd2" type="array">
             <obj_property name="ElementShortName">rd2[31:0]</obj_property>
@@ -372,13 +374,14 @@
             <obj_property name="ObjectShortName">btaken</obj_property>
          </wvobject>
       </wvobject>
-      <wvobject fp_name="group578" type="group">
-         <obj_property name="label">branch_mux</obj_property>
+      <wvobject fp_name="group69" type="group">
+         <obj_property name="label">load_mux</obj_property>
          <obj_property name="DisplayName">label</obj_property>
          <obj_property name="isExpanded"></obj_property>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_LOAD_MUX/in0" type="array">
             <obj_property name="ElementShortName">in0[31:0]</obj_property>
             <obj_property name="ObjectShortName">in0[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_LOAD_MUX/in1" type="array">
             <obj_property name="ElementShortName">in1[31:0]</obj_property>
@@ -391,10 +394,12 @@
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_LOAD_MUX/in3" type="array">
             <obj_property name="ElementShortName">in3[31:0]</obj_property>
             <obj_property name="ObjectShortName">in3[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_LOAD_MUX/in4" type="array">
             <obj_property name="ElementShortName">in4[31:0]</obj_property>
             <obj_property name="ObjectShortName">in4[31:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_LOAD_MUX/mux_sel" type="array">
             <obj_property name="ElementShortName">mux_sel[2:0]</obj_property>
@@ -403,12 +408,12 @@
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_LOAD_MUX/out_mux" type="array">
             <obj_property name="ElementShortName">out_mux[31:0]</obj_property>
             <obj_property name="ObjectShortName">out_mux[31:0]</obj_property>
+            <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
          </wvobject>
       </wvobject>
-      <wvobject fp_name="group579" type="group">
+      <wvobject fp_name="group77" type="group">
          <obj_property name="label">branch_and</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="isExpanded"></obj_property>
          <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_BR_AND/branch" type="logic">
             <obj_property name="ElementShortName">branch</obj_property>
             <obj_property name="ObjectShortName">branch</obj_property>
@@ -422,74 +427,85 @@
             <obj_property name="ObjectShortName">branch_sel</obj_property>
          </wvobject>
       </wvobject>
-      <wvobject fp_name="group570" type="group">
-         <obj_property name="label">program_counter</obj_property>
+      <wvobject fp_name="group81" type="group">
+         <obj_property name="label">or</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-         <obj_property name="isExpanded"></obj_property>
-         <wvobject fp_name="group571" type="group">
-            <obj_property name="label">register</obj_property>
-            <obj_property name="DisplayName">label</obj_property>
-            <obj_property name="isExpanded"></obj_property>
-            <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/data_in" type="array">
-               <obj_property name="ElementShortName">data_in[31:0]</obj_property>
-               <obj_property name="ObjectShortName">data_in[31:0]</obj_property>
-               <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-            </wvobject>
-            <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/data_out" type="array">
-               <obj_property name="ElementShortName">data_out[31:0]</obj_property>
-               <obj_property name="ObjectShortName">data_out[31:0]</obj_property>
-            </wvobject>
-            <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register" type="array">
-               <obj_property name="ElementShortName">register[31:0]</obj_property>
-               <obj_property name="ObjectShortName">register[31:0]</obj_property>
-            </wvobject>
+         <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_JAL_OR/a" type="logic">
+            <obj_property name="ElementShortName">a</obj_property>
+            <obj_property name="ObjectShortName">a</obj_property>
          </wvobject>
-         <wvobject fp_name="group573" type="group">
-            <obj_property name="label">pc_mux</obj_property>
-            <obj_property name="DisplayName">label</obj_property>
-            <obj_property name="isExpanded"></obj_property>
-            <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/U_BRANCH_MUX/in0" type="array">
-               <obj_property name="ElementShortName">in0[31:0]</obj_property>
-               <obj_property name="ObjectShortName">in0[31:0]</obj_property>
-            </wvobject>
-            <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/U_BRANCH_MUX/in1" type="array">
-               <obj_property name="ElementShortName">in1[31:0]</obj_property>
-               <obj_property name="ObjectShortName">in1[31:0]</obj_property>
-            </wvobject>
-            <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/U_BRANCH_MUX/mux_sel" type="logic">
-               <obj_property name="ElementShortName">mux_sel</obj_property>
-               <obj_property name="ObjectShortName">mux_sel</obj_property>
-            </wvobject>
-            <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/U_BRANCH_MUX/out_mux" type="array">
-               <obj_property name="ElementShortName">out_mux[31:0]</obj_property>
-               <obj_property name="ObjectShortName">out_mux[31:0]</obj_property>
-            </wvobject>
+         <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_JAL_OR/b" type="logic">
+            <obj_property name="ElementShortName">b</obj_property>
+            <obj_property name="ObjectShortName">b</obj_property>
+         </wvobject>
+         <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_JAL_OR/out" type="logic">
+            <obj_property name="ElementShortName">out</obj_property>
+            <obj_property name="ObjectShortName">out</obj_property>
          </wvobject>
       </wvobject>
    </wvobject>
-   <wvobject fp_name="group580" type="group">
+   <wvobject fp_name="group85" type="group">
+      <obj_property name="label">program_counter</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/branch_data" type="array">
+         <obj_property name="ElementShortName">branch_data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">branch_data[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/branch_sel" type="logic">
+         <obj_property name="ElementShortName">branch_sel</obj_property>
+         <obj_property name="ObjectShortName">branch_sel</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/clk" type="logic">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/jalr" type="logic">
+         <obj_property name="ElementShortName">jalr</obj_property>
+         <obj_property name="ObjectShortName">jalr</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/jalr_out" type="array">
+         <obj_property name="ElementShortName">jalr_out[31:0]</obj_property>
+         <obj_property name="ObjectShortName">jalr_out[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/pc" type="array">
+         <obj_property name="ElementShortName">pc[31:0]</obj_property>
+         <obj_property name="ObjectShortName">pc[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/reset" type="logic">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/U_RV32I_CPU/U_DATAPATH/U_PC/rs1_data" type="array">
+         <obj_property name="ElementShortName">rs1_data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">rs1_data[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject fp_name="group129" type="group">
       <obj_property name="label">data_mem</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="isExpanded"></obj_property>
+      <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/data_mem" type="array">
+         <obj_property name="ElementShortName">data_mem[0:31][31:0]</obj_property>
+         <obj_property name="ObjectShortName">data_mem[0:31][31:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
       <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/i_funct3" type="array">
          <obj_property name="ElementShortName">i_funct3[2:0]</obj_property>
          <obj_property name="ObjectShortName">i_funct3[2:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/daddr" type="array">
-         <obj_property name="ElementShortName">daddr[31:0]</obj_property>
-         <obj_property name="ObjectShortName">daddr[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/dwdata" type="array">
-         <obj_property name="ElementShortName">dwdata[31:0]</obj_property>
-         <obj_property name="ObjectShortName">dwdata[31:0]</obj_property>
+         <obj_property name="Radix">BINARYRADIX</obj_property>
       </wvobject>
       <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/drdata" type="array">
          <obj_property name="ElementShortName">drdata[31:0]</obj_property>
          <obj_property name="ObjectShortName">drdata[31:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/data_mem" type="array">
-         <obj_property name="ElementShortName">data_mem[0:31][31:0]</obj_property>
-         <obj_property name="ObjectShortName">data_mem[0:31][31:0]</obj_property>
+      <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/dwdata" type="array">
+         <obj_property name="ElementShortName">dwdata[31:0]</obj_property>
+         <obj_property name="ObjectShortName">dwdata[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="/tb_RV32I/dut/I_DATA_MEM/dwe" type="logic">
+         <obj_property name="ElementShortName">dwe</obj_property>
+         <obj_property name="ObjectShortName">dwe</obj_property>
       </wvobject>
    </wvobject>
 </wave_config>

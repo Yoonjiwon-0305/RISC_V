@@ -9,7 +9,7 @@
 `define II_TYPE 7'b001_0011
 `define B_TYPE 7'b110_0011
 `define LUI_TYPE 7'b011_0111
-`define AULPC_TYPE 7'b110_1111
+`define AUIPC_TYPE 7'b001_0111
 `define JAL_TYPE 7'b110_1111
 `define JALR_TYPE 7'b110_0111
 
