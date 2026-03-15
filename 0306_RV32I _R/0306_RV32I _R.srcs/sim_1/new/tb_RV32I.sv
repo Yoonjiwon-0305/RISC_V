@@ -19,7 +19,7 @@ module tb_RV32I ();
         @(negedge clk);
         reset = 0;
 
-        repeat (800) @(negedge clk);
+        repeat (11) @(negedge clk);
         $stop;
     end
 
@@ -67,4 +67,5 @@ endmodule
 //    *b = *a;
 //    *a = temp;
 //    return;
-//}
+//int i  = 0;;
+//
