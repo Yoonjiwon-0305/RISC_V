@@ -9,7 +9,7 @@ module data_mem (
     output logic [31:0] drdata
 );
     //word address
-    logic [31:0] data_mem[0:31];
+    logic [31:0] data_mem[0:127];
 
     always_ff @(posedge clk) begin
         if (dwe) begin
@@ -18,25 +18,23 @@ module data_mem (
                     case (daddr[1:0])
                         2'b00:
                         data_mem[daddr[31:2]] <= {
-                            data_mem[daddr[31:2]][31:8],
-                            dwdata[7:0]  
+                            data_mem[daddr[31:2]][31:8], dwdata[7:0]
                         };
                         2'b01:
                         data_mem[daddr[31:2]] <= {
                             data_mem[daddr[31:2]][31:16],
-                            dwdata[15:8],  
+                            dwdata[15:8],
                             data_mem[daddr[31:2]][7:0]
                         };
                         2'b10:
                         data_mem[daddr[31:2]] <= {
                             data_mem[daddr[31:2]][31:24],
-                            dwdata[23:16],  
+                            dwdata[23:16],
                             data_mem[daddr[31:2]][15:0]
                         };
                         2'b11:
                         data_mem[daddr[31:2]] <= {
-                            dwdata[31:24],  
-                            data_mem[daddr[31:2]][23:0]
+                            dwdata[31:24], data_mem[daddr[31:2]][23:0]
                         };
                     endcase
                 end
@@ -44,13 +42,11 @@ module data_mem (
                     case (daddr[1])
                         1'b0:
                         data_mem[daddr[31:2]] <= {
-                            data_mem[daddr[31:2]][31:16], 
-                            dwdata[15:0]  
+                            data_mem[daddr[31:2]][31:16], dwdata[15:0]
                         };
                         1'b1:
                         data_mem[daddr[31:2]] <= {
-                            dwdata[31:16], 
-                            data_mem[daddr[31:2]][15:0]  
+                            dwdata[31:16], data_mem[daddr[31:2]][15:0]
                         };
                     endcase
                 end
@@ -63,17 +59,59 @@ module data_mem (
 
     always_comb begin
         case (i_funct3)
-            `LB:
-            drdata = {
-                {24{data_mem[daddr[31:2]][7]}}, data_mem[daddr[31:2]][7:0]
-            };
-            `LH:
-            drdata = {
-                {16{data_mem[daddr[31:2]][15]}}, data_mem[daddr[31:2]][15:0]
-            };
+            `LB: begin
+                case (daddr[1:0])
+                    2'b00:
+                    drdata = {
+                        {24{data_mem[daddr[31:2]][7]}},
+                        data_mem[daddr[31:2]][7:0]
+                    };
+                    2'b01:
+                    drdata = {
+                        {24{data_mem[daddr[31:2]][15]}},
+                        data_mem[daddr[31:2]][15:8]
+                    };
+                    2'b10:
+                    drdata = {
+                        {24{data_mem[daddr[31:2]][23]}},
+                        data_mem[daddr[31:2]][23:16]
+                    };
+                    2'b11:
+                    drdata = {
+                        {24{data_mem[daddr[31:2]][31]}},
+                        data_mem[daddr[31:2]][31:24]
+                    };
+                endcase
+            end
+            `LBU: begin
+                case (daddr[1:0])
+                    2'b00: drdata = {24'd0, data_mem[daddr[31:2]][7:0]};
+                    2'b01: drdata = {24'd0, data_mem[daddr[31:2]][15:8]};
+                    2'b10: drdata = {24'd0, data_mem[daddr[31:2]][23:16]};
+                    2'b11: drdata = {24'd0, data_mem[daddr[31:2]][31:24]};
+                endcase
+            end
+            `LH: begin
+                case (daddr[1])
+                    1'b0:
+                    drdata = {
+                        {16{data_mem[daddr[31:2]][15]}},
+                        data_mem[daddr[31:2]][15:0]
+                    };
+                    1'b1:
+                    drdata = {
+                        {16{data_mem[daddr[31:2]][31]}},
+                        data_mem[daddr[31:2]][31:16]
+                    };
+                endcase
+            end
+            `LHU: begin
+                case (daddr[1])
+                    1'b0: drdata = {16'd0, data_mem[daddr[31:2]][15:0]};
+                    1'b1: drdata = {16'd0, data_mem[daddr[31:2]][31:16]};
+                endcase
+            end
             `LW: drdata = data_mem[daddr[31:2]];
-            `LBU: drdata = {24'd0, data_mem[daddr[31:2]][7:0]};
-            `LHU: drdata = {16'd0, data_mem[daddr[31:2]][15:0]};
             default: drdata = 32'd0;
         endcase
     end
