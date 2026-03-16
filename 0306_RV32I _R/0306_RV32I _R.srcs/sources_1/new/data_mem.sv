@@ -10,23 +10,53 @@ module data_mem (
 );
     //word address
     logic [31:0] data_mem[0:31];
+
     always_ff @(posedge clk) begin
         if (dwe) begin
             case (i_funct3)
                 `SB: begin
-                    data_mem[daddr[31:2]] <= {
-                        data_mem[daddr[31:2]][31:8], dwdata[7:0]
-                    };
+                    case (daddr[1:0])
+                        2'b00:
+                        data_mem[daddr[31:2]] <= {
+                            data_mem[daddr[31:2]][31:8],
+                            dwdata[7:0]  
+                        };
+                        2'b01:
+                        data_mem[daddr[31:2]] <= {
+                            data_mem[daddr[31:2]][31:16],
+                            dwdata[15:8],  
+                            data_mem[daddr[31:2]][7:0]
+                        };
+                        2'b10:
+                        data_mem[daddr[31:2]] <= {
+                            data_mem[daddr[31:2]][31:24],
+                            dwdata[23:16],  
+                            data_mem[daddr[31:2]][15:0]
+                        };
+                        2'b11:
+                        data_mem[daddr[31:2]] <= {
+                            dwdata[31:24],  
+                            data_mem[daddr[31:2]][23:0]
+                        };
+                    endcase
                 end
                 `SH: begin
-                    data_mem[daddr[31:2]] <= {
-                        data_mem[daddr[31:2]][31:16], dwdata[15:0]
-                    };
+                    case (daddr[1])
+                        1'b0:
+                        data_mem[daddr[31:2]] <= {
+                            data_mem[daddr[31:2]][31:16], 
+                            dwdata[15:0]  
+                        };
+                        1'b1:
+                        data_mem[daddr[31:2]] <= {
+                            dwdata[31:16], 
+                            data_mem[daddr[31:2]][15:0]  
+                        };
+                    endcase
                 end
                 `SW: begin
                     data_mem[daddr[31:2]] <= dwdata;
                 end
-                default: ;
             endcase
         end
     end

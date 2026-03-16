@@ -201,7 +201,7 @@ module register_file (
         end
         rf_reg[15] = -1;
         rf_reg[16] = -16;
-        rf_reg[20] = 32'h12348080;
+        rf_reg[20] = 32'h12345678;
     end
 `endif
 

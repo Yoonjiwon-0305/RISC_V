@@ -19,7 +19,7 @@ module tb_RV32I ();
         @(negedge clk);
         reset = 0;
 
-        repeat (11) @(negedge clk);
+        repeat (8) @(negedge clk);
         $stop;
     end
 
@@ -40,7 +40,7 @@ endmodule
 //int adder(int a, int b){
 //    return a+b;
 //}
-///* Type your code here, or load an example. */
+
 
 
 // ver2
@@ -67,5 +67,4 @@ endmodule
 //    *b = *a;
 //    *a = temp;
 //    return;
-//int i  = 0;;
-//
+//}
