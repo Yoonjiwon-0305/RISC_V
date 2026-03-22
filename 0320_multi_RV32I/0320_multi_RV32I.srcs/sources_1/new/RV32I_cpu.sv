@@ -15,12 +15,9 @@ module RV32I_cpu (
 );
     logic [2:0] rfwdsrc_sel;
     logic rf_we, alusrc;
-    logic [31:0] rd1, rd2, w_pc_alu_result;
     logic [4:0] w_alu_control;
     logic branch;
-    logic branch_sel;
     logic jal, jalr;
-    logic jalr_out, auipc_out;
     logic pc_en;
 
 
@@ -30,6 +27,7 @@ module RV32I_cpu (
         .funct7     (instr_data[31:25]),
         .funct3     (instr_data[14:12]),
         .opcode     (instr_data[6:0]),
+        .pc_en      (pc_en),
         .rf_we      (rf_we),
         .jal        (jal),
         .jalr       (jalr),
@@ -44,6 +42,7 @@ module RV32I_cpu (
     RV32I_datapath U_DATAPATH (
         .clk        (clk),
         .reset      (reset),
+        .pc_en      (pc_en),
         .rf_we      (rf_we),
         .jal        (jal),
         .jalr       (jalr),
@@ -84,18 +83,7 @@ module control_unit (
         FETCH,
         DECODE,
         EXECUTE,
-        EXE_R,
-        EXE_I,
-        EXE_S,
-        EXE_B,
-        EXE_IL,
-        EXE_J,
-        EXE_JL,
-        EXE_LUI,
-        EXE_AUIPC,
         MEM,
-        MEM_S,
-        MEM_IL,
         WB
     } state_e;
 
@@ -120,10 +108,23 @@ module control_unit (
                 next_state = EXECUTE;
             end
             EXECUTE: begin
-
+                case (opcode)
+                    `R_TYPE, `II_TYPE, `LUI_TYPE, `AUIPC_TYPE, `JALR_TYPE,`JAL_TYPE:
+                    next_state = WB;  // rd에 쓰는 애들
+                    `IL_TYPE:
+                    next_state = MEM;  // load → 메모리 읽어야 함
+                    `S_TYPE:
+                    next_state = MEM;  // store → 메모리 써야 함
+                    `B_TYPE: next_state = FETCH;  // 레지스터 write 없음
+                    default: next_state = FETCH;
+                endcase
             end
             MEM: begin
-
+                case (opcode)
+                    `IL_TYPE: next_state = WB;  // load → WB 필요
+                    `S_TYPE:  next_state = FETCH;  // store → WB 없음
+                    default:  next_state = FETCH;
+                endcase
             end
             WB: begin
                 next_state = FETCH;
@@ -175,20 +176,18 @@ module control_unit (
                     `S_TYPE: begin
                         alusrc      = 1'b1;
                         alu_control = 5'b0_0_000;
-                        o_funct3    = funct3;
-                        dwe         = 1'b1;
                     end
                     `IL_TYPE: begin
                         alusrc      = 1'b1;
                         alu_control = 5'b0_0_000;
-                        o_funct3    = funct3;
-                        dwe         = 1'b0;
                     end
                     `LUI_TYPE: begin
-                        //숙제
+                        alusrc      = 1'b1;
+                        alu_control = 5'b1_1_000;
                     end
                     `AUIPC_TYPE: begin
-                        //숙제
+                        alusrc      = 1'b1;
+                        alu_control = 5'b1_1_001;
                     end
                     `JAL_TYPE: begin
                         jal         = 1'b1;
@@ -197,16 +196,36 @@ module control_unit (
                         alu_control = `ADD;
                     end
                     `JALR_TYPE: begin
-                        rf_we       = 1'b1;
                         jal         = 1'b1;
                         jalr        = 1'b1;
                         alusrc      = 1'b1;
                         alu_control = `ADD;
                         branch      = 1'b1;
-                        rfwdsrc_sel = 3'b100;
-                        o_funct3    = 3'b100;
-                        dwe         = 1'b0;
                     end
+                endcase
+            end
+            MEM: begin
+                case (opcode)
+                    `S_TYPE: begin
+                        dwe = 1'b1;
+                        o_funct3 = funct3;
+                    end
+                    `IL_TYPE: begin
+                        dwe = 1'b0;
+                        o_funct3 = funct3;
+                    end
+                endcase
+            end
+            WB: begin
+                rf_we = 1'b1;
+                case (opcode)
+                    `R_TYPE:    rfwdsrc_sel = 3'b000; // ALU 결과
+                    `II_TYPE:   rfwdsrc_sel = 3'b000; // ALU 결과
+                    `IL_TYPE:   rfwdsrc_sel = 3'b001; // 메모리 읽은 값
+                    `LUI_TYPE:  rfwdsrc_sel = 3'b010; // LUI 결과
+                    `AUIPC_TYPE:rfwdsrc_sel = 3'b011; // AUIPC 결과
+                    `JAL_TYPE:  rfwdsrc_sel = 3'b100; // PC+4
+                    `JALR_TYPE: rfwdsrc_sel = 3'b100; // PC+4    `
                 endcase
             end
         endcase

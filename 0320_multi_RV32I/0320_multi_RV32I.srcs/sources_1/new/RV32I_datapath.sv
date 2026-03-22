@@ -23,9 +23,10 @@ module RV32I_datapath (
     logic [31:0] i_dec_rs2, o_dec_rs2;
     logic [31:0] i_dec_imm, o_dec_imm;
     //exe
-    logic [31:0] i_exe_alu_result, o_exe_alu_result;
+    logic [31:0] o_exe_alu_result;
     logic [31:0] o_exe_rs2;
-    logic [31:0] w_alu_result, w_rd1, w_rd2, w_alurs2_data, w_wb_result;
+    logic [31:0] w_alu_result, w_alurs2_data, w_wb_result;
+    logic [31:0] o_exe_imm, o_exe_auipc, o_exe_jal;
     //mem to wb
     logic [31:0] o_mem_drdata;
 
@@ -35,21 +36,20 @@ module RV32I_datapath (
     logic [31:0] w_jalr_out, w_auipc_out;
     logic w_branch_and;
 
-
-
     //fetch & execute
     program_counter U_PC (
         .clk        (clk),
         .reset      (reset),
         .pc_en      (pc_en),
         .branch_data(o_dec_imm),
-        .rs1_data   (w_rd1),
+        .rs1_data   (o_dec_rs1),
         .jalr       (jalr),
         .branch_sel (w_or_jal),
         .jalr_out   (w_jalr_out),
         .auipc_out  (w_auipc_out),
         .pc         (instr_addr)
     );
+
     //decode
     register_file U_REGISTER_FILE (
         .clk  (clk),
@@ -60,7 +60,7 @@ module RV32I_datapath (
         .wdata(w_wb_result),
         .rf_we(rf_we),
         .rd1  (i_dec_rs1),
-        .rd2  (w_rd2)
+        .rd2  (i_dec_rs2)
     );
 
     imm_extender U_IMM_EX (
@@ -105,18 +105,40 @@ module RV32I_datapath (
         .btaken(btaken)
     );
 
+    //exe #1
     register U_EXE_ALU_RESULT (
         .clk(clk),
         .reset(reset),
         .data_in(w_alu_result),
         .data_out(o_exe_alu_result)  // to Daddr
     );
-
+    //exe #2
     register U_EXE_REG_RS2 (
         .clk(clk),
         .reset(reset),
         .data_in(o_dec_rs2),  // from alu result
         .data_out(o_exe_rs2)  // to Data MEM_Wdata
+    );
+    //exe #3
+    register U_EXE_IMM_REG (
+        .clk(clk),
+        .reset(reset),
+        .data_in(o_dec_imm),
+        .data_out(o_exe_imm)
+    );
+    //exe #4
+    register U_EXE_AUIPC_REG (
+        .clk(clk),
+        .reset(reset),
+        .data_in(w_auipc_out),
+        .data_out(o_exe_auipc)
+    );
+    //exe #5
+    register U_EXE_JAL_REG (
+        .clk(clk),
+        .reset(reset),
+        .data_in(w_jalr_out),
+        .data_out(o_exe_jal)
     );
 
     //MEM to WB
@@ -131,9 +153,9 @@ module RV32I_datapath (
     mux_5x1 U_LOAD_MUX (
         .in0(o_exe_alu_result),  //from exe_alu_result
         .in1(o_mem_drdata),
-        .in2(o_dec_imm),
-        .in3(w_auipc_out),
-        .in4(w_jalr_out),
+        .in2(o_exe_imm),
+        .in3(o_exe_auipc),
+        .in4(o_exe_jal),
         .mux_sel(rfwdsrc_sel),
         .out_mux(w_wb_result)
     );
@@ -366,7 +388,7 @@ module program_counter (
         .data_out(pc)
     );
 
-    register U_PCNEXT_REG (
+    register U_exe_pc (
         .clk(clk),
         .reset(reset),
         .data_in(w_next_pc),

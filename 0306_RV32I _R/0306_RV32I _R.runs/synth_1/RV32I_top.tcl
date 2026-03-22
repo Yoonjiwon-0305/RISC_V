@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.runs/synth_1/RV32I_top.tcl"
+  variable script "D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.runs/synth_1/RV32I_top.tcl"
   variable category "vivado_synth"
 }
 
@@ -76,24 +76,24 @@ create_project -in_memory -part xc7a35tcpg236-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir {D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.cache/wt} [current_project]
-set_property parent.project_path {D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.xpr} [current_project]
+set_property webtalk.parent_dir {D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.cache/wt} [current_project]
+set_property parent.project_path {D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.xpr} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property board_part digilentinc.com:basys3:part0:1.2 [current_project]
-set_property ip_output_repo {d:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.cache/ip} [current_project]
+set_property ip_output_repo {d:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.cache/ip} [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-read_verilog {{D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/define.vh}}
-set_property file_type "Verilog Header" [get_files {{D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/define.vh}}]
-read_mem {{D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/riscv_rv32i_data.mem}}
+read_verilog {{D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/define.vh}}
+set_property file_type "Verilog Header" [get_files {{D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/define.vh}}]
+read_mem {{D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/riscv_rv32i_data.mem}}
 read_verilog -library xil_defaultlib -sv {
-  {D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/RV32I_cpu.sv}
-  {D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/RV32I_datapath.sv}
-  {D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/data_mem.sv}
-  {D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/instruction_mem.sv}
-  {D:/workplace/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/RV32I_top.sv}
+  {D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/RV32I_cpu.sv}
+  {D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/RV32I_datapath.sv}
+  {D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/data_mem.sv}
+  {D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/instruction_mem.sv}
+  {D:/Ondevice/RISC_V/RISC_V/0306_RV32I _R/0306_RV32I _R.srcs/sources_1/new/RV32I_top.sv}
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -104,6 +104,9 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
+read_xdc D:/Ondevice/total/Basys-3-Master.xdc
+set_property used_in_implementation false [get_files D:/Ondevice/total/Basys-3-Master.xdc]
+
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 

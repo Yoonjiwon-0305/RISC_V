@@ -1,0 +1,114 @@
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+| Date         : Sun Mar 22 22:41:14 2026
+| Host         : DESKTOP-SFB4JCN running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file RV32I_top_control_sets_placed.rpt
+| Design       : RV32I_top
+| Device       : xc7a35t
+--------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    36 |
+|    Minimum number of control sets                        |    36 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |     0 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    36 |
+| >= 0 to < 4        |     0 |
+| >= 4 to < 6        |     0 |
+| >= 6 to < 8        |     0 |
+| >= 8 to < 10       |     4 |
+| >= 10 to < 12      |     0 |
+| >= 12 to < 14      |     0 |
+| >= 14 to < 16      |     0 |
+| >= 16              |    32 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |               0 |            0 |
+| No           | No                    | Yes                    |              32 |            9 |
+| No           | Yes                   | No                     |               0 |            0 |
+| Yes          | No                    | No                     |             992 |          362 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |               0 |            0 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++----------------+-----------------------------------------------------------------+------------------+------------------+----------------+--------------+
+|  Clock Signal  |                          Enable Signal                          | Set/Reset Signal | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------+-----------------------------------------------------------------+------------------+------------------+----------------+--------------+
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/p_1_in[0]             |                  |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/p_1_in[2]             |                  |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/p_1_in[1]             |                  |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/p_1_in[3]             |                  |                2 |              8 |         4.00 |
+|  clk_IBUF_BUFG |                                                                 | reset_IBUF       |                9 |             32 |         3.56 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/E[0]                  |                  |               13 |             32 |         2.46 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_24[0] |                  |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_37[0] |                  |               16 |             32 |         2.00 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_49[0] |                  |               13 |             32 |         2.46 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_50[0] |                  |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/reset[0]              |                  |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_30[0] |                  |               15 |             32 |         2.13 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_39[0] |                  |               12 |             32 |         2.67 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_46[0] |                  |               13 |             32 |         2.46 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_36[0] |                  |               14 |             32 |         2.29 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_43[0] |                  |               11 |             32 |         2.91 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_26[0] |                  |                5 |             32 |         6.40 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_44[0] |                  |                9 |             32 |         3.56 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_40[0] |                  |               12 |             32 |         2.67 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_23[0] |                  |               14 |             32 |         2.29 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_29[0] |                  |               11 |             32 |         2.91 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_31[0] |                  |               17 |             32 |         1.88 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_25[0] |                  |                9 |             32 |         3.56 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_33[0] |                  |               13 |             32 |         2.46 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_45[0] |                  |               15 |             32 |         2.13 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_28[0] |                  |               12 |             32 |         2.67 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_47[0] |                  |               11 |             32 |         2.91 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_27[0] |                  |               10 |             32 |         3.20 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_42[0] |                  |               14 |             32 |         2.29 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_22[0] |                  |               14 |             32 |         2.29 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_35[0] |                  |               10 |             32 |         3.20 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_38[0] |                  |               11 |             32 |         2.91 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_32[0] |                  |               12 |             32 |         2.67 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_34[0] |                  |                9 |             32 |         3.56 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_41[0] |                  |               13 |             32 |         2.46 |
+|  clk_IBUF_BUFG | U_RV32I_CPU/U_DATAPATH/U_PC/U_PC_REGISTER/register_reg[2]_48[0] |                  |               10 |             32 |         3.20 |
++----------------+-----------------------------------------------------------------+------------------+------------------+----------------+--------------+
+
+

@@ -1,11 +1,12 @@
 `timescale 1ns / 1ps
 
 module RV32I_top (
-    input clk,
-    input reset
+    input         clk,
+    input         reset,
+    output [31:0] instr_addr
 );
 
-    logic [31:0] instr_addr;
+    //logic [31:0] instr_addr;
     logic [31:0] instr_data;
     logic [31:0] daddr;
     logic [31:0] dwdata, drdata;
