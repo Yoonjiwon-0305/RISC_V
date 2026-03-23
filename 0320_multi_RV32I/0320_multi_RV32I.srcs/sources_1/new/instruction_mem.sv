@@ -9,7 +9,7 @@ module instruction_mem (
 
     initial begin
 
-        // $readmemh("riscv_rv32i_data.mem", rom);
+         $readmemh("riscv_rv32i_data.mem", rom);
 
         //R_type instruction
         //rom[0] = 32'h00208ab3;  //add x21 x1,x2
@@ -93,11 +93,11 @@ module instruction_mem (
         //rom[3] = 32'h00001517;  //auipc x10, 1
 
         //J_type instruction
-        rom[0] = 32'h00c000ef;  //jal x1, 12
-        rom[1] = 32'h002202b3;  //add x5, x4, x2
-        rom[2] = 32'h0000006f;  //jal x0, 0
-        rom[3] = 32'h003282b3;  //add x5, x5, x3
-        rom[4] = 32'h000080e7;  //jalr x1, 0(x1)
+        //rom[0] = 32'h00c000ef;  //jal x1, 12
+        //rom[1] = 32'h002202b3;  //add x5, x4, x2
+        //rom[2] = 32'h0000006f;  //jal x0, 0
+        //rom[3] = 32'h003282b3;  //add x5, x5, x3
+        //rom[4] = 32'h000080e7;  //jalr x1, 0(x1)
     end
 
 
