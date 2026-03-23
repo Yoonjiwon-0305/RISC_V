@@ -224,8 +224,16 @@ module control_unit (
                     `IL_TYPE:   rfwdsrc_sel = 3'b001; // 메모리 읽은 값
                     `LUI_TYPE:  rfwdsrc_sel = 3'b010; // LUI 결과
                     `AUIPC_TYPE:rfwdsrc_sel = 3'b011; // AUIPC 결과
-                    `JAL_TYPE:  rfwdsrc_sel = 3'b100; // PC+4
-                    `JALR_TYPE: rfwdsrc_sel = 3'b100; // PC+4    `
+                    `JAL_TYPE: begin
+                        rfwdsrc_sel = 3'b100;  // PC+4
+                        jal = 1'b1;
+                    end
+
+                    `JALR_TYPE: begin
+                        rfwdsrc_sel = 3'b100;
+                        jal    = 1'b1;  // ← 추가!
+                        jalr = 1'b1;  // ← 추가!
+                    end  // PC+4    `
                 endcase
             end
         endcase
