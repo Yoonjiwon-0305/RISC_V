@@ -6,12 +6,15 @@ module RV32I_cpu (
     input         clk,
     input         reset,
     input  [31:0] instr_data,
-    input  [31:0] drdata,
+    input  [31:0] bus_rdata,
+    input         bus_ready,
     output [31:0] instr_addr,
-    output        dwe,
-    output [ 2:0] o_funct3,
-    output [31:0] daddr,
-    output [31:0] dwdata
+    output        bus_w_req,
+    output        bus_r_req,
+    output [31:0] bus_addr,
+    output [31:0] bus_wdata,
+    output [ 2:0] o_funct3
+
 );
     logic [2:0] rfwdsrc_sel;
     logic rf_we, alusrc;
@@ -27,6 +30,7 @@ module RV32I_cpu (
         .funct7     (instr_data[31:25]),
         .funct3     (instr_data[14:12]),
         .opcode     (instr_data[6:0]),
+        .ready      (bus_ready),
         .pc_en      (pc_en),
         .rf_we      (rf_we),
         .jal        (jal),
@@ -36,7 +40,8 @@ module RV32I_cpu (
         .branch     (branch),
         .rfwdsrc_sel(rfwdsrc_sel),
         .o_funct3   (o_funct3),
-        .dwe        (dwe)
+        .dwe        (bus_w_req),
+        .dre        (bus_r_req)
     );
 
     RV32I_datapath U_DATAPATH (
@@ -50,13 +55,12 @@ module RV32I_cpu (
         .rfwdsrc_sel(rfwdsrc_sel),
         .alu_control(w_alu_control),
         .branch     (branch),
-        .drdata     (drdata),
         .instr_data (instr_data),
+        .bus_rdata  (bus_rdata),
         .instr_addr (instr_addr),
-        .daddr      (daddr),
-        .dwdata     (dwdata)
+        .bus_addr   (bus_addr),
+        .bus_wdata  (bus_wdata)
     );
-
 endmodule
 
 
@@ -66,6 +70,7 @@ module control_unit (
     input        [6:0] funct7,
     input        [2:0] funct3,
     input        [6:0] opcode,
+    input              ready,
     output logic       pc_en,
     output logic       rf_we,
     output logic       jal,
@@ -75,7 +80,8 @@ module control_unit (
     output logic       branch,
     output logic [2:0] rfwdsrc_sel,
     output logic [2:0] o_funct3,
-    output logic       dwe
+    output logic       dwe,
+    output logic       dre
 
 );
 
@@ -91,9 +97,9 @@ module control_unit (
 
     always_ff @(posedge clk, posedge reset) begin
         if (reset) begin
-            current_state = FETCH;
+            current_state <= FETCH;
         end else begin
-            current_state = next_state;
+            current_state <= next_state;
         end
     end
 
@@ -120,11 +126,12 @@ module control_unit (
                 endcase
             end
             MEM: begin
-                case (opcode)
-                    `IL_TYPE: next_state = WB;  // load → WB 필요
-                    `S_TYPE:  next_state = FETCH;  // store → WB 없음
-                    default:  next_state = FETCH;
-                endcase
+                if (ready) begin
+                    case (opcode)
+                        `IL_TYPE: next_state = WB;  // load → WB 필요
+                        `S_TYPE:  next_state = FETCH;  // store → WB 없음  
+                    endcase
+                end
             end
             WB: begin
                 next_state = FETCH;
@@ -144,7 +151,8 @@ module control_unit (
         branch      = 1'b0;
         rfwdsrc_sel = 1'b0;
         o_funct3    = 3'b000;
-        dwe         = 1'b0;
+        dwe         = 1'b0;  //s_type 
+        dre         = 1'b0;  // IL_type
         case (current_state)
             FETCH: begin
                 pc_en = 1'b1;
@@ -211,7 +219,7 @@ module control_unit (
                         o_funct3 = funct3;
                     end
                     `IL_TYPE: begin
-                        dwe = 1'b0;
+                        dre = 1'b1;
                         o_funct3 = funct3;
                     end
                 endcase
@@ -228,7 +236,6 @@ module control_unit (
                         rfwdsrc_sel = 3'b100;  // PC+4
                         jal = 1'b1;
                     end
-
                     `JALR_TYPE: begin
                         rfwdsrc_sel = 3'b100;
                         jal    = 1'b1;  // ← 추가!
