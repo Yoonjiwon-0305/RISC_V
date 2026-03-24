@@ -18,11 +18,24 @@ module RV32I_MCU (
     logic [ 2:0] o_funct3;
 
     //ROM
-    instruction_mem U_INSTRUCTION_MEM (.*);
+    instruction_mem U_INST_MEM (
+        .instr_addr(instr_addr),
+        .instr_data(instr_data)
+    );
+
 
     RV32I_cpu U_RV32I_CPU (
-        .*,
-        .o_funct3(o_funct3)
+        .clk       (clk),
+        .reset     (reset),
+        .instr_data(instr_data),
+        .bus_rdata (bus_rdata),
+        .bus_ready (bus_ready),
+        .instr_addr(instr_addr),
+        .bus_w_req (bus_w_req),
+        .bus_r_req (bus_r_req),
+        .bus_addr  (bus_addr),
+        .bus_wdata (bus_wdata),
+        .o_funct3  (o_funct3)
     );
 
     // APB_master

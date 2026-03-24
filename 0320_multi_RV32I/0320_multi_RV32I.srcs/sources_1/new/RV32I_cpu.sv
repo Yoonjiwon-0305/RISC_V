@@ -57,6 +57,7 @@ module RV32I_cpu (
         .branch     (branch),
         .instr_data (instr_data),
         .bus_rdata  (bus_rdata),
+        .bus_ready  (bus_ready),
         .instr_addr (instr_addr),
         .bus_addr   (bus_addr),
         .bus_wdata  (bus_wdata)
@@ -234,13 +235,13 @@ module control_unit (
                     `AUIPC_TYPE:rfwdsrc_sel = 3'b011; // AUIPC 결과
                     `JAL_TYPE: begin
                         rfwdsrc_sel = 3'b100;  // PC+4
-                        jal = 1'b1;
+                        jal         = 1'b1;
                     end
                     `JALR_TYPE: begin
                         rfwdsrc_sel = 3'b100;
-                        jal    = 1'b1;  // ← 추가!
-                        jalr = 1'b1;  // ← 추가!
-                    end  // PC+4    `
+                        jal         = 1'b1;
+                        jalr        = 1'b1;
+                    end  // PC+4   
                 endcase
             end
         endcase

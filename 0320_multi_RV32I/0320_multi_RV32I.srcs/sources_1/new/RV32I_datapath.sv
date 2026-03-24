@@ -14,6 +14,7 @@ module RV32I_datapath (
     input         branch,
     input  [31:0] instr_data,
     input  [31:0] bus_rdata,
+    input         bus_ready,
     output [31:0] instr_addr,
     output [31:0] bus_addr,
     output [31:0] bus_wdata
@@ -142,9 +143,10 @@ module RV32I_datapath (
     );
 
     //MEM to WB
-    register U_MEM_REG_RDATA (
+    register_en U_MEM_REG_RDATA (
         .clk(clk),
         .reset(reset),
+        .en(bus_ready),  // ready = 1일때 만 저장
         .data_in(bus_rdata),  // from alu result
         .data_out(o_mem_drdata)  // to Data MEM_Wdata
     );

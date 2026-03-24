@@ -7,10 +7,10 @@ module APB_master (
     input               p_clk,
     input               p_reset,
     // soc internal signal with cpu
-    input        [31:0] addr,  
+    input        [31:0] addr,
     input        [31:0] wdata,
-    input               w_req, // signal cpu : dwe
-    input               r_req, // signal cpu : dre
+    input               w_req,    // signal cpu : dwe
+    input               r_req,    // signal cpu : dre
     // 상단 구간 output
     // apb interface signal
     output logic [31:0] p_addr,   //need register
@@ -52,16 +52,12 @@ module APB_master (
 
     apb_state_e current_state, next_state;
 
-    //wire
-    logic reg_en;  // register에 공급할 enable
-    logic [31:0] mux_rdata;
     logic [31:0] p_addr_next, p_wdata_next;
-
     logic p_write_next;
     logic decode_en;
 
     // FSM 상태 레지스터
-    always_ff @(posedge p_clk, negedge p_reset) begin 
+    always_ff @(posedge p_clk, negedge p_reset) begin
         if (!p_reset) begin
             current_state <= IDLE;
             p_addr        <= 32'd0;
@@ -147,24 +143,6 @@ module APB_master (
 
 endmodule
 
-module apb_register (
-    input               clk,
-    input               reset,
-    input        [31:0] addr,
-    input               en,
-    output logic [31:0] r_addr
-
-);
-
-    always_ff @(posedge clk, posedge reset) begin
-        if (reset) begin
-            r_addr <= 32'd0;
-        end else if (en) begin
-            r_addr <= addr;
-        end
-    end
-endmodule
-
 module address_decoder (
     input               en,
     input        [31:0] addr,
@@ -212,6 +190,7 @@ module address_decoder (
             endcase
         end
     end
+
     // 조합 CL 
     // my way
     //assign p_sel_0 = (addr[31:12] == 20'h10000);  //RAM
@@ -220,8 +199,6 @@ module address_decoder (
     //assign p_sel_3 = (addr[31:12] == 20'h20002);  //GPIO
     //assign p_sel_4 = (addr[31:12] == 20'h20003);  //FND
     //assign p_sel_5 = (addr[31:12] == 20'h20004);  //UART
-
-
 
 endmodule
 
