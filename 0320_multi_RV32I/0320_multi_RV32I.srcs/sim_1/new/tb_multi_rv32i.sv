@@ -4,7 +4,7 @@ module tb_multi_rv32i ();
 
     logic clk, reset;
 
-    RV32I_top dut (
+    RV32I_MCU dut (
         .clk  (clk),
         .reset(reset)
     );
@@ -13,17 +13,16 @@ module tb_multi_rv32i ();
 
     initial begin
         reset = 1;
-
-        @(negedge clk);
-        @(negedge clk);
+        repeat(2) @(posedge clk);
         reset = 0;
 
-        repeat (1250) @(negedge clk);
+        repeat(90) @(posedge clk);
         $stop;
     end
 
 endmodule
-
+//li sp,268435456
+//addi sp,sp,1024
 // ver1 
 /* Type your code here, or load an example. */
 //int adder(int a, int b);

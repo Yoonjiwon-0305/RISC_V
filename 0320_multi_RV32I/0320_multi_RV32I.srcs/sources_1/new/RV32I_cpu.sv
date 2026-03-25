@@ -129,8 +129,8 @@ module control_unit (
             MEM: begin
                 if (ready) begin
                     case (opcode)
-                        `IL_TYPE: next_state = WB;  // load → WB 필요
-                        `S_TYPE:  next_state = FETCH;  // store → WB 없음  
+                        `IL_TYPE: next_state = WB;
+                        `S_TYPE:  next_state = FETCH;
                     endcase
                 end
             end

@@ -9,7 +9,7 @@ module instruction_mem (
 
     initial begin
 
-         $readmemh("riscv_rv32i_data.mem", rom);
+         $readmemh("U_APB_RAM.mem", rom);
 
         //R_type instruction
         //rom[0] = 32'h00208ab3;  //add x21 x1,x2

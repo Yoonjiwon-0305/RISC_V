@@ -17,6 +17,18 @@ module RV32I_MCU (
     logic        bus_ready;
     logic [ 2:0] o_funct3;
 
+    logic p_sel_0, p_sel_1, p_sel_2;
+    logic p_sel_3, p_sel_4, p_sel_5;
+
+    logic p_ready_0, p_ready_1, p_ready_2;
+    logic p_ready_3, p_ready_4, p_ready_5;
+
+    logic [31:0] p_rdata_0, p_rdata_1, p_rdata_2;
+    logic [31:0] p_rdata_3, p_rdata_4, p_rdata_5;
+
+    logic [31:0] p_addr, p_wdata;
+    logic p_en, p_write;
+
     //ROM
     instruction_mem U_INST_MEM (
         .instr_addr(instr_addr),
@@ -47,41 +59,51 @@ module RV32I_MCU (
         .wdata    (bus_wdata),
         .w_req    (bus_w_req),  // signal cpu : dwe
         .r_req    (bus_r_req),  // signal cpu : dre
-        .p_addr   (),           //need register
-        .p_wdata  (),           //need register
-        .p_en     (),           //공통
-        .p_write  (),           //공통 
-        .p_sel_0  (),           //RAM
-        .p_sel_1  (),           //GPO
-        .p_sel_2  (),           //GPI
-        .p_sel_3  (),           //GPIO
-        .p_sel_4  (),           //FND
-        .p_sel_5  (),           //UART
-        .p_rdata_0(),           //RAM
-        .p_rdata_1(),           //GPO
-        .p_rdata_2(),           //GPI
-        .p_rdata_3(),           //GPIO
-        .p_rdata_4(),           //FND
-        .p_rdata_5(),           //UART
-        .p_ready_0(),           //RAM
-        .p_ready_1(),           //GPO
-        .p_ready_2(),           //GPI
-        .p_ready_3(),           //GPIO
-        .p_ready_4(),           //FND
-        .p_ready_5(),           //UART
         .rdata    (bus_rdata),
-        .ready    (bus_ready)
+        .ready    (bus_ready),
+        //form apb 
+        .p_addr   (p_addr),     //need register
+        .p_wdata  (p_wdata),    //need register
+        .p_en     (p_en),       //공통
+        .p_write  (p_write),    //공통 
+        //from slave
+        .p_sel_0  (p_sel_0),    //RAM
+        .p_sel_1  (p_sel_1),    //GPO
+        .p_sel_2  (p_sel_2),    //GPI
+        .p_sel_3  (p_sel_3),    //GPIO
+        .p_sel_4  (p_sel_4),    //FND
+        .p_sel_5  (p_sel_5),    //UART
+        .p_rdata_0(p_rdata_0),  //RAM
+        .p_rdata_1(p_rdata_1),  //GPO
+        .p_rdata_2(p_rdata_2),  //GPI
+        .p_rdata_3(p_rdata_3),  //GPIO
+        .p_rdata_4(p_rdata_4),  //FND
+        .p_rdata_5(p_rdata_5),  //UART
+        .p_ready_0(p_ready_0),  //RAM
+        .p_ready_1(p_ready_1),  //GPO
+        .p_ready_2(p_ready_2),  //GPI
+        .p_ready_3(p_ready_3),  //GPIO
+        .p_ready_4(p_ready_4),  //FND
+        .p_ready_5(p_ready_5)   //UART
+
 
     );
 
-    // APB_slave
-    data_mem U_DATA_MEM (
-        .clk(),
-        .dwe(),
-        .i_funct3(),
-        .daddr(),
-        .dwdata(),
-        .drdata()
+    slave_RAM U_SLAVE_RAM (
+
+        .clk     (clk),
+        .reset   (reset),
+        .p_addr  (p_addr),
+        .p_wdata (p_wdata),
+        .p_en    (p_en),
+        .p_write (p_write),
+        .p_sel   (p_sel_0),
+        .p_funct3(o_funct3),
+        .p_rdata (p_rdata_0),
+        .p_ready (p_ready_0)
     );
+
+
+
 
 endmodule

@@ -57,8 +57,8 @@ module APB_master (
     logic decode_en;
 
     // FSM 상태 레지스터
-    always_ff @(posedge p_clk, negedge p_reset) begin
-        if (!p_reset) begin
+    always_ff @(posedge p_clk, posedge p_reset) begin
+        if (p_reset) begin
             current_state <= IDLE;
             p_addr        <= 32'd0;
             p_wdata       <= 32'd0;
@@ -76,12 +76,16 @@ module APB_master (
         next_state   = current_state;
         decode_en    = 1'b0;
         p_en         = 1'b0;
-        p_write_next = 1'b0;
+        p_write_next = p_write;
         p_addr_next  = p_addr;
         p_wdata_next = p_wdata;
         case (current_state)
             IDLE: begin
-                decode_en = 0;
+                decode_en    = 0;
+                p_en         = 0;
+                p_write_next = 1'b0;
+                p_addr_next  = 32'd0;
+                p_wdata_next = 32'd0;
                 if (w_req | r_req) begin
                     p_addr_next  = addr;
                     p_wdata_next = wdata;
@@ -255,8 +259,8 @@ module mux_6x1 (
                 endcase
             end
             default: begin
-                rdata = 32'hxxxx_xxxx;
-                ready = 1'bx;
+                rdata = 32'd0;
+                ready = 1'b0;
             end
         endcase
     end
