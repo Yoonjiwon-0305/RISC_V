@@ -3,20 +3,25 @@
 module tb_multi_rv32i ();
 
     logic clk, reset;
+    logic [15:0] sw;
+    logic [15:0] led;
 
     RV32I_MCU dut (
-        .clk  (clk),
-        .reset(reset)
+        .clk(clk),
+        .reset(reset),
+        .sw(sw),
+        .led(led)
     );
     initial clk = 0;
     always #5 clk = ~clk;
 
     initial begin
         reset = 1;
-        repeat(2) @(posedge clk);
+        sw = 16'hABCD;
+        repeat (2) @(posedge clk);
         reset = 0;
 
-        repeat(220) @(posedge clk);
+        repeat (220) @(posedge clk);
         $stop;
     end
 

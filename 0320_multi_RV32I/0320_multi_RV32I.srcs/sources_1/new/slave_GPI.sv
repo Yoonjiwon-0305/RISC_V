@@ -22,26 +22,26 @@ module slave_GPI (
 
     assign p_ready = (p_sel && p_en) ? 1'b1 : 1'b0;
 
-    genvar i;
-    generate
-        for (i = 0; i < 16; i++) begin
-            assign gpi_data_reg[i] = (gpi_ctl_reg[i]) ? i_gpi[i] : 1'bz;
-        end
-    endgenerate
+    int i;
 
-    assign p_rdata = (p_addr[11:0] == gpi_ctl_addr)  ? {16'h0000, gpi_ctl_reg}  :
-                     (p_addr[11:0] == gpi_data_addr) ? {16'h0000, gpi_data_reg} :
-                                                        32'hxxxx_xxxx;
+    assign p_rdata =(p_addr[11:0] == gpi_data_addr) ? {16'h0000, gpi_data_reg} :32'hxxxx_xxxx;
+
     always_ff @(posedge clk, posedge reset) begin
         if (reset) begin
-            gpi_ctl_reg <= 16'h0000;
+            gpi_ctl_reg  <= 16'h0000;
+            gpi_data_reg <= 16'h0000;
         end else begin
             if (p_ready & p_write) begin
                 case (p_addr[11:0])
-                    gpi_ctl_addr: begin
-                        gpi_ctl_reg <= p_wdata[15:0];
-                    end
+                    gpi_ctl_addr: gpi_ctl_reg <= p_wdata[15:0];
                 endcase
+            end
+        end
+        for (i = 0; i < 16; i++) begin
+            if (gpi_ctl_reg[i]) begin
+                gpi_data_reg[i] <= i_gpi[i];
+            end else begin
+                gpi_data_reg[i] <= 1'b0;
             end
         end
     end
