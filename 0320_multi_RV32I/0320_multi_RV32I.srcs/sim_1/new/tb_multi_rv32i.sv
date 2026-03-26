@@ -16,7 +16,7 @@ module tb_multi_rv32i ();
         repeat(2) @(posedge clk);
         reset = 0;
 
-        repeat(90) @(posedge clk);
+        repeat(220) @(posedge clk);
         $stop;
     end
 
@@ -152,3 +152,57 @@ adder:
 //    *a = temp;
 //    return;
 //}
+
+//apb master sim
+/* c code
+void main(void) {
+    *(unsigned int*) 0x10000000 =0x00000041;
+    return ;
+}
+
+< compile>
+main:
+        addi    sp,sp,-16
+        sw      ra,12(sp)
+        sw      s0,8(sp)
+        addi    s0,sp,16
+        li      a5,268435456
+        li      a4,65
+        sw      a4,0(a5)
+        nop
+        lw      ra,12(sp)
+        lw      s0,8(sp)
+        addi    sp,sp,16
+        jr      ra
+<online assembly>
+li sp,268435456
+addi sp,sp, 1024
+main:
+        addi    sp,sp,-16
+        sw      ra,12(sp)
+        sw      s0,8(sp)
+        addi    s0,sp,16
+        li      a5,268435456
+        li      a4,65
+        sw      a4,0(a5)
+        nop
+        lw      ra,12(sp)
+        lw      s0,8(sp)
+        addi    sp,sp,16
+        jr      ra
+<hex code>
+10000137
+40010113
+ff010113
+00112623
+00812423
+01010413
+100007b7
+04100713
+00e7a023
+00000013
+00c12083
+00812403
+01010113
+00008067
+*/

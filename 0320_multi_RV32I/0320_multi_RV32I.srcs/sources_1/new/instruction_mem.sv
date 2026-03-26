@@ -9,7 +9,7 @@ module instruction_mem (
 
     initial begin
 
-         $readmemh("U_APB_RAM.mem", rom);
+         $readmemh("APB_GPI.mem", rom);
 
         //R_type instruction
         //rom[0] = 32'h00208ab3;  //add x21 x1,x2
@@ -110,3 +110,207 @@ endmodule
 
 // $readmemh("riscv_rv32i_data.mem",rom);
 
+/* slave_apb_GPO
+<c code>
+//void delay (int delay);
+
+void main(void) {
+    *(unsigned int*) 0x10000000 =0x00000041;
+    *(unsigned int*) 0x20000000 =0x0000ffff; //gpo_ctl_reg
+    *(unsigned int*) 0x20000004 =0x0000AAAA; //gpo_data_reg
+    *(unsigned int*) 0x20000004 =0x00005555; //gpo_data_reg
+    *(unsigned int*) 0x20000000 =0x00000000; //gpo_ctl_reg
+    return ;
+}
+
+//void delay(int delay) {
+//    delay = delay * 10000000;
+//    while(delay){
+//        delay --;
+//    }
+//    return;
+//}
+
+<online assembly>
+li sp,268435456
+addi sp,sp, 1024
+main:
+        addi    sp,sp,-16
+        sw      ra,12(sp)
+        sw      s0,8(sp)
+        addi    s0,sp,16
+        li      a5,268435456
+        li      a4,65
+        sw      a4,0(a5)
+        li      a5,536870912
+        li      a4,65536
+        addi    a4,a4,-1
+        sw      a4,0(a5)
+        li      a5,536870912
+        addi    a5,a5,4
+        li      a4,45056
+        addi    a4,a4,-1366
+        sw      a4,0(a5)
+        li      a5,536870912
+        addi    a5,a5,4
+        li      a4,20480
+        addi    a4,a4,1365
+        sw      a4,0(a5)
+        li      a5,536870912
+        sw      zero,0(a5)
+        nop
+        lw      ra,12(sp)
+        lw      s0,8(sp)
+        addi    sp,sp,16
+        jr      ra
+< hex code >
+10000137
+40010113
+ff010113
+00112623
+00812423
+01010413
+100007b7
+04100713
+00e7a023
+200007b7
+00010737
+fff70713
+00e7a023
+200007b7
+00478793
+0000b737
+aaa70713
+00e7a023
+200007b7
+00478793
+00005737
+55570713
+00e7a023
+200007b7
+0007a023
+00000013
+00c12083
+00812403
+01010113
+00008067
+*/
+
+/*/GPI
+//void delay (int delay);
+
+void main(void) {
+    int i = 0;
+    //RAM write test
+    *(unsigned int*) 0x10000000 =0x00000041;
+    //RAM read test
+    i = *(unsigned int *) 0x10000000;
+    // GPO write test
+    *(unsigned int*) 0x20000000 =0x0000ffff; //gpo_ctl_reg
+    *(unsigned int*) 0x20000004 =0x0000AAAA; //gpo_data_reg
+    *(unsigned int*) 0x20000004 =0x00005555; //gpo_data_reg
+    *(unsigned int*) 0x20000000 =0x00000000; //gpo_ctl_reg
+    // GPI read test
+    *(unsigned int*) 0x20001000 =0x0000ffff; //gpo_ctl_reg
+    i = *(unsigned int *) 0x20001004;
+    return ;
+}
+
+//void delay(int delay) {
+//    delay = delay * 10000000;
+//    while(delay){
+//        delay --;
+//    }
+//    return;
+//}
+
+<c code>
+li sp,268435456
+addi sp,sp, 1024
+main:
+        addi    sp,sp,-32
+        sw      ra,28(sp)
+        sw      s0,24(sp)
+        addi    s0,sp,32
+        sw      zero,-20(s0)
+        li      a5,268435456
+        li      a4,65
+        sw      a4,0(a5)
+        li      a5,268435456
+        lw      a5,0(a5)
+        sw      a5,-20(s0)
+        li      a5,536870912
+        li      a4,65536
+        addi    a4,a4,-1
+        sw      a4,0(a5)
+        li      a5,536870912
+        addi    a5,a5,4
+        li      a4,45056
+        addi    a4,a4,-1366
+        sw      a4,0(a5)
+        li      a5,536870912
+        addi    a5,a5,4
+        li      a4,20480
+        addi    a4,a4,1365
+        sw      a4,0(a5)
+        li      a5,536870912
+        sw      zero,0(a5)
+        li      a5,536875008
+        li      a4,65536
+        addi    a4,a4,-1
+        sw      a4,0(a5)
+        li      a5,536875008
+        addi    a5,a5,4
+        lw      a5,0(a5)
+        sw      a5,-20(s0)
+        nop
+        lw      ra,28(sp)
+        lw      s0,24(sp)
+        addi    sp,sp,32
+        jr      ra
+
+<hex code>
+10000137
+40010113
+fe010113
+00112e23
+00812c23
+02010413
+fe042623
+100007b7
+04100713
+00e7a023
+100007b7
+0007a783
+fef42623
+200007b7
+00010737
+fff70713
+00e7a023
+200007b7
+00478793
+0000b737
+aaa70713
+00e7a023
+200007b7
+00478793
+00005737
+55570713
+00e7a023
+200007b7
+0007a023
+200017b7
+00010737
+fff70713
+00e7a023
+200017b7
+00478793
+0007a783
+fef42623
+00000013
+01c12083
+01812403
+02010113
+00008067
+
+*/
