@@ -25,26 +25,23 @@ module slave_GPI (
     int i;
 
     assign p_rdata =(p_addr[11:0] == gpi_data_addr) ? {16'h0000, gpi_data_reg} :32'hxxxx_xxxx;
+    //assign p_rdata = {16'h0000, gpi_data_reg};
 
-    always_ff @(posedge clk, posedge reset) begin
+    always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             gpi_ctl_reg  <= 16'h0000;
             gpi_data_reg <= 16'h0000;
         end else begin
-            if (p_ready & p_write) begin
+            for (i = 0; i < 16; i = i + 1) begin
+                if (gpi_ctl_reg[i]) gpi_data_reg[i] <= i_gpi[i];
+                else gpi_data_reg[i] <= 1'bz;
+            end
+            if (p_ready && p_write) begin
                 case (p_addr[11:0])
                     gpi_ctl_addr: gpi_ctl_reg <= p_wdata[15:0];
                 endcase
             end
         end
-        for (i = 0; i < 16; i++) begin
-            if (gpi_ctl_reg[i]) begin
-                gpi_data_reg[i] <= i_gpi[i];
-            end else begin
-                gpi_data_reg[i] <= 1'b0;
-            end
-        end
     end
-
 
 endmodule

@@ -1,10 +1,11 @@
 `timescale 1ns / 1ps
 
 module RV32I_MCU (
-    input         clk,
-    input         reset,
-    input  [15:0] sw,
-    output [15:0] led
+    input              clk,
+    input              reset,
+    input       [ 7:0] gpi,
+    output      [ 7:0] gpo,
+    inout  wire [15:0] gpio
 );
     // CPU ↔ ROM
     logic [31:0] instr_addr;
@@ -115,7 +116,7 @@ module RV32I_MCU (
         .p_en   (p_en),
         .p_sel  (p_sel_1),
         .p_rdata(p_rdata_1),
-        .o_gpo  (led),
+        .o_gpo  (gpo),
         .p_ready(p_ready_1)
     );
 
@@ -128,10 +129,24 @@ module RV32I_MCU (
         .p_write(p_write),
         .p_en   (p_en),
         .p_sel  (p_sel_2),
-        .i_gpi  (sw),
+        .i_gpi  (gpi),
         .p_rdata(p_rdata_2),
         .p_ready(p_ready_2)
     );
 
+    slave_GPIO U_SLAVE_GPIO (
+
+        .clk    (clk),
+        .reset  (reset),
+        .p_addr (p_addr),
+        .p_wdata(p_wdata),
+        .p_write(p_write),
+        .p_en   (p_en),
+        .p_sel  (p_sel_3),
+        .gpio   (gpio),
+        .p_rdata(p_rdata_3),
+        .p_ready(p_ready_3)
+
+    );
 
 endmodule

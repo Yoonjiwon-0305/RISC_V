@@ -3,25 +3,35 @@
 module tb_multi_rv32i ();
 
     logic clk, reset;
-    logic [15:0] sw;
-    logic [15:0] led;
+    logic [ 7:0] gpi;
+    logic [ 7:0] gpo;
+    wire  [15:0] gpio;
 
     RV32I_MCU dut (
-        .clk(clk),
+        .clk  (clk),
         .reset(reset),
-        .sw(sw),
-        .led(led)
+        .gpi  (gpi),
+        .gpo  (gpo),
+        .gpio (gpio)
     );
     initial clk = 0;
     always #5 clk = ~clk;
 
+    logic [7:0] sw_input;
+    assign gpio[7:0] = sw_input;  // SW 입력 시뮬
+
     initial begin
         reset = 1;
-        sw = 16'hABCD;
+        //gpi   = 8'hAB;
+        gpi = 8'hAA;
+        sw_input = 8'hAB;
+        //gpo   = 16'h0000;
+        //gpio  = 16'h0000;
         repeat (2) @(posedge clk);
         reset = 0;
+        gpi   = 8'h01;
 
-        repeat (220) @(posedge clk);
+        repeat (20000) @(posedge clk);
         $stop;
     end
 

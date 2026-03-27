@@ -5,11 +5,11 @@ module instruction_mem (
     output [31:0] instr_data
 );
 
-    logic [31:0] rom[0:127];
+    logic [31:0] rom[0:255];
 
     initial begin
 
-         $readmemh("APB_GPI.mem", rom);
+         $readmemh("APB_GPIO_LED_BLINK.mem", rom);
 
         //R_type instruction
         //rom[0] = 32'h00208ab3;  //add x21 x1,x2
