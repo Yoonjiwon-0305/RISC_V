@@ -6,10 +6,12 @@ sv xil_defaultlib  --include "../../../../0320_multi_RV32I.srcs/sources_1/new" \
 "../../../../0320_multi_RV32I.srcs/sources_1/new/RV32I_top.sv" \
 "../../../../0320_multi_RV32I.srcs/sources_1/new/data_mem.sv" \
 "../../../../0320_multi_RV32I.srcs/sources_1/new/instruction_mem.sv" \
+"../../../../0320_multi_RV32I.srcs/sources_1/new/slave_FND.sv" \
 "../../../../0320_multi_RV32I.srcs/sources_1/new/slave_GPI.sv" \
 "../../../../0320_multi_RV32I.srcs/sources_1/new/slave_GPIO.sv" \
 "../../../../0320_multi_RV32I.srcs/sources_1/new/slave_GPO.sv" \
 "../../../../0320_multi_RV32I.srcs/sources_1/new/slave_RAM.sv" \
+"../../../../0320_multi_RV32I.srcs/sources_1/new/slave_UART.sv" \
 "../../../../0320_multi_RV32I.srcs/sim_1/new/tb_multi_rv32i.sv" \
 
 # compile glbl module

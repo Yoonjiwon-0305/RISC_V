@@ -9,319 +9,195 @@ module slave_FND (
     input               p_en,
     input               p_sel,
     output       [31:0] p_rdata,
-    output       [ 7:0] o_fnd_seg,  // fnd_data  
-    output       [ 3:0] o_fnd_com,  // fnd_digit 
+    output       [ 7:0] fnd_data,
+    output       [ 3:0] fnd_digit,
     output logic        p_ready
-
 );
 
-    localparam [11:0] fnd_ctl_addr  = 12'h000;  // 자리 ON/OFF 제어 (미사용시 4'hF 고정)
-    localparam [11:0] fnd_data_addr = 12'h004;  // 표시할 숫자값 (0~255)
+    localparam [11:0] fnd_data_addr = 12'h000;
 
-    logic [7:0] fnd_ctl_reg;
-    logic [7:0] fnd_data_reg;
+    logic [15:0] fnd_data_reg;
 
     assign p_ready = (p_sel && p_en) ? 1'b1 : 1'b0;
 
-    assign p_rdata = (p_addr[11:0] == FND_CTL_ADDR)  ? {24'h0, fnd_ctl_reg}  :
-                     (p_addr[11:0] == FND_DATA_ADDR)  ? {24'h0, fnd_data_reg} : 32'hxxxx_xxxx;
+    assign p_rdata = (p_addr[11:0] == fnd_data_addr) ? {16'h0, fnd_data_reg}
+                                                      : 32'hxxxx_xxxx;
 
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
-            fnd_ctl_reg  <= 8'hff;  // 전체 자리 ON
-            fnd_data_reg <= 8'h00;
+            fnd_data_reg <= 16'h0000;
         end else begin
             if (p_ready && p_write) begin
                 case (p_addr[11:0])
-                    fnd_ctl_addr:  fnd_ctl_reg <= p_wdata[7:0];
-                    fnd_data_addr: fnd_data_reg <= p_wdata[7:0];
+                    fnd_data_addr: fnd_data_reg <= p_wdata[15:0];
                 endcase
             end
         end
     end
 
     fnd_controller U_FND (
-        .clk        (clk),
-        .reset      (reset),
-        .sel_display(),
-        .fnd_in_data(),
-        .fnd_data   (o_fnd_seg),
-        .fnd_digit  (o_fnd_com)
+        .clk    (clk),
+        .reset  (reset),
+        .fnd_in (fnd_data_reg),
+        .fnd_seg(fnd_data),
+        .fnd_com(fnd_digit)
     );
+
 endmodule
 
 module fnd_controller (
     input         clk,
     input         reset,
-    inout         sel_display,
-    input  [23:0] fnd_in_data,
-    output [ 7:0] fnd_data,
-    output [ 3:0] fnd_digit
+    input  [15:0] fnd_in,
+    output [ 7:0] fnd_seg,
+    output [ 3:0] fnd_com
 );
-
-    wire [3:0] w_digit_msec_1, w_digit_msec_10;
-    wire [3:0] w_digit_sec_1, w_digit_sec_10;
-    wire [3:0] w_digit_min_1, w_digit_min_10;
-    wire [3:0] w_digit_hour_1, w_digit_hour_10;
-    wire [3:0] w_mux_hour_min_out, w_mux_sec_msec_out;
-    wire [3:0] w_mux_2x1_out;
-    wire [2:0] w_digit_sel;
+    wire [3:0] w_digit_0, w_digit_1, w_digit_2, w_digit_3;
+    wire [1:0] w_sel;
+    wire [3:0] w_digit_mux;
     wire       w_1khz;
-    wire       w_dot_onoff;
 
-    dot_onoff_comp U_DOT_COMP (
-        .msec     (fnd_in_data[6:0]),
-        .dot_onoff(w_dot_onoff)
+    fnd_digit_splitter U_SPLITTER (
+        .fnd_in (fnd_in),
+        .digit_0(w_digit_0),
+        .digit_1(w_digit_1),
+        .digit_2(w_digit_2),
+        .digit_3(w_digit_3)
     );
 
-
-    //msec_digit_spl
-    digit_splitter #(
-        .BIT_WIDTH(7)
-    ) U_MSEC_DS (
-        .in_data (fnd_in_data[6:0]),
-        .digit_1 (w_digit_msec_1),
-        .digit_10(w_digit_msec_10)
-    );
-    //sec_digit_spl
-    digit_splitter #(
-        .BIT_WIDTH(6)
-    ) U_SEC_DS (
-        .in_data (fnd_in_data[12:7]),
-        .digit_1 (w_digit_sec_1),
-        .digit_10(w_digit_sec_10)
-    );
-    //min_digit_spl
-    digit_splitter #(
-        .BIT_WIDTH(6)
-    ) U_MIN_DS (
-        .in_data (fnd_in_data[18:13]),
-        .digit_1 (w_digit_min_1),
-        .digit_10(w_digit_min_10)
-    );
-    //mhour_digit_spl
-    digit_splitter #(
-        .BIT_WIDTH(5)
-    ) U_HOUR_DS (
-        .in_data (fnd_in_data[23:19]),
-        .digit_1 (w_digit_hour_1),
-        .digit_10(w_digit_hour_10)
+    fnd_clk_div U_CLK_DIV (
+        .clk  (clk),
+        .reset(reset),
+        .o_clk(w_1khz)
     );
 
-
-    mux_8x1 U_MUX_SEC_MSEC (
-        .sel           (w_digit_sel),
-        .digit_1       (w_digit_msec_1),
-        .digit_10      (w_digit_msec_10),
-        .digit_100     (w_digit_sec_1),
-        .digit_1000    (w_digit_sec_10),
-        .digit_dot_1   (4'hf),
-        .digit_dot_10  (4'hf),
-        .digit_dot_100 ({3'b111, w_dot_onoff}),
-        .digit_dot_1000(4'hf),
-        .mux_out       (w_mux_sec_msec_out)
-    );
-    mux_8x1 U_MUX_HOUR_MIN (
-        .sel           (w_digit_sel),
-        .digit_1       (w_digit_min_1),
-        .digit_10      (w_digit_min_10),
-        .digit_100     (w_digit_hour_1),
-        .digit_1000    (w_digit_hour_10),
-        .digit_dot_1   (4'hf),
-        .digit_dot_10  (4'hf),
-        .digit_dot_100 ({3'b111, w_dot_onoff}),
-        .digit_dot_1000(4'hf),
-        .mux_out       (w_mux_hour_min_out)
-    );
-    mux_2X1 U_MUX_2X1 (
-        .sel(sel_display),
-        .i_sel0(w_mux_sec_msec_out),
-        .i_sel1(w_mux_hour_min_out),
-        .o_mux(w_mux_2x1_out)
+    fnd_counter U_COUNTER (
+        .clk  (clk),    
+        .reset(reset),
+        .en   (w_1khz),  
+        .sel  (w_sel)
     );
 
-    clk_div U_CLK_DIV (
-        .clk   (clk),
-        .reset (reset),
-        .o_1khz(w_1khz)
+    fnd_mux U_MUX (
+        .sel    (w_sel),
+        .digit_0(w_digit_0),
+        .digit_1(w_digit_1),
+        .digit_2(w_digit_2),
+        .digit_3(w_digit_3),
+        .mux_out(w_digit_mux)
     );
 
-
-    counter_8 U_COUNTER_8 (
-        .clk      (w_1khz),
-        .reset    (reset),
-        .digit_sel(w_digit_sel)
+    fnd_com_decoder U_COM_DEC (
+        .sel    (w_sel),
+        .fnd_com(fnd_com)
     );
 
-
-    decoder_2x4 U_DECODER_2x4 (
-        .digit_sel  (w_digit_sel[1:0]),
-        .decoder_out(fnd_digit)
+    fnd_bcd U_BCD (
+        .bcd    (w_digit_mux),
+        .fnd_seg(fnd_seg)
     );
-
-    bcd U_BCD (
-        .bcd     (w_mux_2x1_out),
-        .fnd_data(fnd_data)
-    );
-
 
 endmodule
 
-module mux_2X1 (
-    input        sel,
-    input  [3:0] i_sel0,
-    input  [3:0] i_sel1,
-    output [3:0] o_mux
+module fnd_digit_splitter (
+    input  [15:0] fnd_in,
+    output [ 3:0] digit_0,  // 일의 자리
+    output [ 3:0] digit_1,  // 십의 자리
+    output [ 3:0] digit_2,  // 백의 자리
+    output [ 3:0] digit_3   // 천의 자리
 );
-    assign o_mux = (sel) ? i_sel1 : i_sel0;
+    assign digit_0 = fnd_in % 10;
+    assign digit_1 = (fnd_in / 10) % 10;
+    assign digit_2 = (fnd_in / 100) % 10;
+    assign digit_3 = (fnd_in / 1000) % 10;
 endmodule
 
-module clk_div (
+module fnd_clk_div (
     input      clk,
     input      reset,
-    output reg o_1khz
+    output reg o_clk
 );
     reg [$clog2(100_000):0] counter;
 
-
-    always @(posedge clk or posedge reset) begin
+    always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
             counter <= 0;
-            o_1khz  <= 1'b0;
+            o_clk   <= 0;
         end else begin
             if (counter == 99_999) begin
                 counter <= 0;
-                o_1khz  <= 1'b1;
+                o_clk   <= 1'b1;
             end else begin
-                counter <= counter + 17'b1;
-                o_1khz  <= 1'b0;
+                counter <= counter + 1;
+                o_clk   <= 1'b0;
             end
         end
     end
-
-
 endmodule
 
-
-
-module counter_8 (
-    input        clk,
+module fnd_counter (
+    input        clk,    
     input        reset,
-    output [2:0] digit_sel
+    input        en,    
+    output [1:0] sel
 );
-    reg [2:0] counter_r;
-
-    always @(posedge clk or posedge reset) begin
-        if (reset) begin
-            counter_r <= 2'b0;
-        end else begin
-            counter_r <= counter_r + 2'b01;
-        end
+    reg [1:0] cnt;
+    always_ff @(posedge clk or posedge reset) begin
+        if (reset) cnt <= 2'b00;
+        else if (en) cnt <= cnt + 1;  
     end
-
-    assign digit_sel = counter_r;
-
+    assign sel = cnt;
 endmodule
 
-
-
-module decoder_2x4 (
-    input      [1:0] digit_sel,
-    output reg [3:0] decoder_out
-);
-
-    always @(digit_sel) begin
-        case (digit_sel)
-            2'b00: decoder_out <= 4'b1110;
-            2'b01: decoder_out <= 4'b1101;
-            2'b10: decoder_out <= 4'b1011;
-            2'b11: decoder_out <= 4'b0111;
-        endcase
-    end
-endmodule
-
-
-
-
-module mux_8x1 (
-    input      [2:0] sel,
+module fnd_mux (
+    input      [1:0] sel,
+    input      [3:0] digit_0,
     input      [3:0] digit_1,
-    input      [3:0] digit_10,
-    input      [3:0] digit_100,
-    input      [3:0] digit_1000,
-    input      [3:0] digit_dot_1,
-    input      [3:0] digit_dot_10,
-    input      [3:0] digit_dot_100,
-    input      [3:0] digit_dot_1000,
+    input      [3:0] digit_2,
+    input      [3:0] digit_3,
     output reg [3:0] mux_out
 );
-
-    always @(*) begin
+    always_comb begin
         case (sel)
-            3'b000: mux_out <= digit_1;
-            3'b001: mux_out <= digit_10;
-            3'b010: mux_out <= digit_100;
-            3'b011: mux_out <= digit_1000;
-            3'b100: mux_out <= digit_dot_1;
-            3'b101: mux_out <= digit_dot_10;
-            3'b110: mux_out <= digit_dot_100;
-            3'b111: mux_out <= digit_dot_1000;
+            2'b00: mux_out = digit_0;
+            2'b01: mux_out = digit_1;
+            2'b10: mux_out = digit_2;
+            2'b11: mux_out = digit_3;
         endcase
     end
-
 endmodule
 
-
-
-module digit_splitter #(
-    parameter BIT_WIDTH = 7
-) (
-    input  [BIT_WIDTH-1:0] in_data,
-    output [          3:0] digit_1,
-    output [          3:0] digit_10
+module fnd_com_decoder (
+    input      [1:0] sel,
+    output reg [3:0] fnd_com
 );
-
-    assign digit_1 = in_data % 10;
-    assign digit_10 = (in_data / 10) % 10;
-    assign digit_100 = (in_data / 100) % 10;
-    assign digit_1000 = (in_data / 1000) % 10;
-
+    always_comb begin
+        case (sel)
+            2'b00: fnd_com = 4'b1110;
+            2'b01: fnd_com = 4'b1101;
+            2'b10: fnd_com = 4'b1011;
+            2'b11: fnd_com = 4'b0111;
+        endcase
+    end
 endmodule
 
-
-
-module bcd (
+module fnd_bcd (
     input      [3:0] bcd,
-    output reg [7:0] fnd_data
+    output reg [7:0] fnd_seg
 );
-
-    always @(bcd) begin
+    always_comb begin
         case (bcd)
-            4'd0: fnd_data <= 8'hc0;
-            4'd1: fnd_data <= 8'hf9;
-            4'd2: fnd_data <= 8'ha4;
-            4'd3: fnd_data <= 8'hb0;
-            4'd4: fnd_data <= 8'h99;
-            4'd5: fnd_data <= 8'h92;
-            4'd6: fnd_data <= 8'h82;
-            4'd7: fnd_data <= 8'hf8;
-            4'd8: fnd_data <= 8'h80;
-            4'd9: fnd_data <= 8'h90;
-            4'd10: fnd_data <= 8'hff;
-            4'd12: fnd_data <= 8'hff;
-            4'd13: fnd_data <= 8'hff;
-            4'd14: fnd_data <= 8'h7f;
-            4'd15: fnd_data <= 8'hff;
-            default: fnd_data <= 8'hFF;
+            4'd0: fnd_seg = 8'hC0;
+            4'd1: fnd_seg = 8'hF9;
+            4'd2: fnd_seg = 8'hA4;
+            4'd3: fnd_seg = 8'hB0;
+            4'd4: fnd_seg = 8'h99;
+            4'd5: fnd_seg = 8'h92;
+            4'd6: fnd_seg = 8'h82;
+            4'd7: fnd_seg = 8'hF8;
+            4'd8: fnd_seg = 8'h80;
+            4'd9: fnd_seg = 8'h90;
+            default: fnd_seg = 8'hFF;
         endcase
     end
-
-endmodule
-
-
-module dot_onoff_comp (
-    inout [6:0] msec,
-    output dot_onoff
-);
-    assign dot_onoff = (msec < 7'd49);
 endmodule

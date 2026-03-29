@@ -117,12 +117,12 @@ module control_unit (
             EXECUTE: begin
                 case (opcode)
                     `R_TYPE, `II_TYPE, `LUI_TYPE, `AUIPC_TYPE, `JALR_TYPE,`JAL_TYPE:
-                    next_state = WB;  // rd에 쓰는 애들
+                    next_state = WB;  // rd?�� ?��?�� ?��?��
                     `IL_TYPE:
-                    next_state = MEM;  // load → 메모리 읽어야 함
+                    next_state = MEM;  // load ?�� 메모�? ?��?��?�� ?��
                     `S_TYPE:
-                    next_state = MEM;  // store → 메모리 써야 함
-                    `B_TYPE: next_state = FETCH;  // 레지스터 write 없음
+                    next_state = MEM;  // store ?�� 메모�? ?��?�� ?��
+                    `B_TYPE: next_state = FETCH;  // ?���??��?�� write ?��?��
                     default: next_state = FETCH;
                 endcase
             end
@@ -173,7 +173,6 @@ module control_unit (
                             alu_control = {
                                 1'b0, funct7[5], funct3
                             };  // SRA,SRL
-                        end else begin
                             alu_control = {1'b0, funct3};
                         end
                     end
@@ -230,7 +229,7 @@ module control_unit (
                 case (opcode)
                     `R_TYPE:    rfwdsrc_sel = 3'b000; // ALU 결과
                     `II_TYPE:   rfwdsrc_sel = 3'b000; // ALU 결과
-                    `IL_TYPE:   rfwdsrc_sel = 3'b001; // 메모리 읽은 값
+                    `IL_TYPE:   rfwdsrc_sel = 3'b001; // 메모�? ?��?? �?
                     `LUI_TYPE:  rfwdsrc_sel = 3'b010; // LUI 결과
                     `AUIPC_TYPE:rfwdsrc_sel = 3'b011; // AUIPC 결과
                     `JAL_TYPE: begin

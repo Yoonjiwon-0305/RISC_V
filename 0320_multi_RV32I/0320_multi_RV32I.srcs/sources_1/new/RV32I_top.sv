@@ -5,7 +5,11 @@ module RV32I_MCU (
     input              reset,
     input       [ 7:0] gpi,
     output      [ 7:0] gpo,
-    inout  wire [15:0] gpio
+    inout  wire [15:0] gpio,
+    output      [ 7:0] fnd_data,
+    output      [ 3:0] fnd_digit,
+    output             uart_tx,   
+    input              uart_rx     
 );
     // CPU ↔ ROM
     logic [31:0] instr_addr;
@@ -148,5 +152,34 @@ module RV32I_MCU (
         .p_ready(p_ready_3)
 
     );
+
+    slave_FND U_SLAVE_FND (
+        .clk      (clk),
+        .reset    (reset),
+        .p_addr   (p_addr),
+        .p_wdata  (p_wdata),
+        .p_write  (p_write),
+        .p_en     (p_en),
+        .p_sel    (p_sel_4),
+        .p_rdata  (p_rdata_4),
+        .fnd_data (fnd_data),
+        .fnd_digit(fnd_digit),
+        .p_ready  (p_ready_4)
+    );
+
+    slave_UART U_SLAVE_UART (
+        .clk    (clk),
+        .reset  (reset),
+        .p_addr (p_addr),
+        .p_wdata(p_wdata),
+        .p_write(p_write),
+        .p_en   (p_en),
+        .p_sel  (p_sel_5),
+        .p_rdata(p_rdata_5),
+        .p_ready(p_ready_5),
+        .uart_tx(uart_tx),
+        .uart_rx(uart_rx)
+    );
+
 
 endmodule

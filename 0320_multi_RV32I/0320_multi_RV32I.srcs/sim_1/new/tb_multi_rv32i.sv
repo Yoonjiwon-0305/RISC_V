@@ -6,13 +6,17 @@ module tb_multi_rv32i ();
     logic [ 7:0] gpi;
     logic [ 7:0] gpo;
     wire  [15:0] gpio;
+    logic        uart_rx;  // ← 추가
+    wire         uart_tx;  // ← 추가
 
     RV32I_MCU dut (
-        .clk  (clk),
-        .reset(reset),
-        .gpi  (gpi),
-        .gpo  (gpo),
-        .gpio (gpio)
+        .clk    (clk),
+        .reset  (reset),
+        .gpi    (gpi),
+        .gpo    (gpo),
+        .gpio   (gpio),
+        .uart_tx(uart_tx),  // ← 추가
+        .uart_rx(uart_rx)   // ← 추가
     );
     initial clk = 0;
     always #5 clk = ~clk;
@@ -22,18 +26,32 @@ module tb_multi_rv32i ();
 
     initial begin
         reset = 1;
-        //gpi   = 8'hAB;
-        gpi = 8'hAA;
-        sw_input = 8'hAB;
-        //gpo   = 16'h0000;
-        //gpio  = 16'h0000;
+        gpi = 8'h00;
+        uart_rx = 1'b1;  // ← UART idle은 High
+        sw_input = 8'h00;  // ← Z 방지
         repeat (2) @(posedge clk);
         reset = 0;
-        gpi   = 8'h01;
 
-        repeat (20000) @(posedge clk);
+        // FND 멀티플렉싱 확인용으로 충분히 기다림
+        // 1kHz = 100MHz / 100000 사이클
+        repeat (500000) @(posedge clk);
         $stop;
     end
+
+    //initial begin
+    //    reset = 1;
+    //    //gpi   = 8'hAB;
+    //    gpi = 8'hAA;
+    //    sw_input = 8'hAB;
+    //    //gpo   = 16'h0000;
+    //    //gpio  = 16'h0000;
+    //    repeat (2) @(posedge clk);
+    //    reset = 0;
+    //    gpi   = 8'h01;
+    //
+    //    repeat (20000) @(posedge clk);
+    //    $stop;
+    //end
 
 endmodule
 //li sp,268435456
