@@ -1,0 +1,13 @@
+# compile verilog/system verilog design source files
+sv xil_defaultlib  --include "../../../../rtl" \
+"../../../../rtl/data_mem.sv" \
+"../../../../rtl/instruction_mem.sv" \
+"../../../../rtl/rv32i_cpu.sv" \
+"../../../../rtl/rv32i_datapath.sv" \
+"../../../../rtl/RV32I_top.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

@@ -24,7 +24,8 @@ module slave_GPI (
 
     int i;
 
-    assign p_rdata =(p_addr[11:0] == gpi_data_addr) ? {16'h0000, gpi_data_reg} :32'hxxxx_xxxx;
+    assign p_rdata = (p_addr[11:0] == gpi_data_addr) ? {16'h0000, gpi_data_reg}
+                                                  : 32'h0000_0000;  // ✅
     //assign p_rdata = {16'h0000, gpi_data_reg};
 
     always_ff @(posedge clk or posedge reset) begin

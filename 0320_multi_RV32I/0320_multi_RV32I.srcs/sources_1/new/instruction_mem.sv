@@ -9,7 +9,7 @@ module instruction_mem (
 
     initial begin
 
-         $readmemh("APB_GPIO_LED_BLINK.mem", rom);
+         $readmemh("GPIO_TEST.mem", rom);
 
         //R_type instruction
         //rom[0] = 32'h00208ab3;  //add x21 x1,x2

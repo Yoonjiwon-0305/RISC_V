@@ -1,0 +1,20 @@
+# compile verilog/system verilog design source files
+sv xil_defaultlib  --include "../../../../rtl" \
+"../../../../rtl/APB_BRAM.sv" \
+"../../../../rtl/APB_FND.sv" \
+"../../../../rtl/APB_GPI.sv" \
+"../../../../rtl/APB_GPIO.sv" \
+"../../../../rtl/APB_GPO.sv" \
+"../../../../rtl/APB_UART.sv" \
+"../../../../rtl/RV32I_top.sv" \
+"../../../../rtl/apb_master.sv" \
+"../../../../rtl/instruction_mem.sv" \
+"../../../../rtl/rv32i_cpu.sv" \
+"../../../../rtl/rv32i_datapath.sv" \
+"../../../../sim/tb_rv32i.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

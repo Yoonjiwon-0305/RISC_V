@@ -10,7 +10,7 @@ module slave_GPO (
     input               p_en,
     input               p_sel,
     output       [31:0] p_rdata,
-    output       [15:0] o_gpo,
+    output       [7:0] o_gpo,
     output logic        p_ready
 );
 
@@ -45,7 +45,7 @@ module slave_GPO (
 
     genvar i;
     generate
-        for (i = 0; i < 16; i++) begin
+        for (i = 0; i < 8; i++) begin
             assign o_gpo[i] = (gpo_ctl_reg[i]) ? gpo_data_reg[i] : 1'bz;
         end
     endgenerate
