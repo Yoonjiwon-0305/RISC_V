@@ -147,7 +147,7 @@ int adder(int a, int b) { return a + b; }
 SH는 half-word 단위이므로 `daddr[1]` 하나로 상·하위 16비트를 구분했습니다.
 
 <p align="center">
-  <img src="docs/sc-troubleshooting.png" width="750"><br>
+  <img src="docs/sc-troubleshooting.png" width="470"><br>
   <em>수정 후 — 오프셋에 따라 mem[0]이 0xxx78 → 0x5678 → 0x345678 → 0x12345678로 채워짐</em>
 </p>
 
