@@ -34,7 +34,7 @@ RV32I는 32개 범용 레지스터(x0~x31)와 32비트 고정폭 명령어를 �
 ## 1.2 Block Diagram
 
 <p align="center">
-  <img src="docs/sc-blockdiagram.png" width="750"><br>
+  <img src="docs/sc-blockdiagram.png.jpg" width="750"><br>
   <em>Single Cycle Processor 전체 데이터패스</em>
 </p>
 
@@ -126,25 +126,25 @@ int adder(int a, int b) { return a + b; }
 이 값은 **word 단위 주소**라서 오프셋 0~3이 모두 같은 word를 가리키고,
 바이트 위치를 결정하는 `daddr[1:0]`은 무시되고 있었습니다.
 
-```systemverilog
-// Before — 항상 하위 8bit에만 저장
-`SB: data_mem[daddr[31:2]] <= { data_mem[daddr[31:2]][31:8], dwdata[7:0] };
-```
-
 **해결**
 `daddr[1:0]`으로 바이트 위치를 분기해 해당 자리에만 쓰도록 수정했습니다.
-SH는 half-word 단위이므로 `daddr[1]` 하나로 상·하위 16비트를 구분했습니다.
 
 ```systemverilog
-// After — 세부 주소로 저장 위치 결정
+// w = daddr[31:2] (word 주소)
+
+// Before — daddr[1:0]을 무시해 항상 하위 8bit에만 저장
+`SB: mem[w] <= { mem[w][31:8], dwdata[7:0] };
+
+// After — daddr[1:0]으로 바이트 위치 선택
 `SB: case (daddr[1:0])
-       2'b00: data_mem[daddr[31:2]] <= { data_mem[daddr[31:2]][31:8],  dwdata[7:0] };
-       2'b01: data_mem[daddr[31:2]] <= { data_mem[daddr[31:2]][31:16], dwdata[15:8],
-                                         data_mem[daddr[31:2]][7:0] };
-       2'b10: ...
-       2'b11: data_mem[daddr[31:2]] <= { dwdata[31:24], data_mem[daddr[31:2]][23:0] };
+       2'b00: mem[w] <= { mem[w][31:8],  dwdata[7:0]                };
+       2'b01: mem[w] <= { mem[w][31:16], dwdata[15:8],  mem[w][7:0] };
+       2'b10: mem[w] <= { mem[w][31:24], dwdata[23:16], mem[w][15:0]};
+       2'b11: mem[w] <= { dwdata[31:24], mem[w][23:0]               };
      endcase
 ```
+
+SH는 half-word 단위이므로 `daddr[1]` 하나로 상·하위 16비트를 구분했습니다.
 
 <p align="center">
   <img src="docs/sc-troubleshooting.png" width="750"><br>
