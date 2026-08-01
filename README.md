@@ -34,7 +34,7 @@ RV32I는 32개 범용 레지스터(x0~x31)와 32비트 고정폭 명령어를 �
 ## 1.2 Block Diagram
 
 <p align="center">
-  <img src="docs/sc-blockdiagram.png.jpg" width="750"><br>
+  <img src="docs/sc-blockdiagram.png" width="750"><br>
   <em>Single Cycle Processor 전체 데이터패스</em>
 </p>
 
