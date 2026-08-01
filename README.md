@@ -77,11 +77,6 @@ opcode를 기준으로 9개 타입에 대한 제어신호를 생성합니다.
 정반대로 나오도록 구성해, 부호 처리 오류가 있으면 반드시 드러나게 했습니다.
 
 <p align="center">
-  <img src="docs/sc-sim-rtype.png" width="750"><br>
-  <em>R-type 시뮬레이션 — 예상값과 레지스터 결과 대조</em>
-</p>
-
-<p align="center">
   <img src="docs/sc-sim-btype.png" width="750"><br>
   <em>B-type 시뮬레이션 — 분기 성공/실패에 따른 PC 변화</em>
 </p>
@@ -114,11 +109,6 @@ int adder(int a, int b) { return a + b; }
 | 루프 반복 | 함수 호출마다 `sp: 368 ↔ 336`, `s0: 400 ↔ 368` 왕복 |
 | 루프 탈출 | `i = 11` → `ble` 조건 불만족 → `ra`, `s0` 복원 → `sp = 400` 복원 → `ret` |
 | 최종 결과 | `reg[10] = 55` (0부터 10까지의 합) |
-
-<p align="center">
-  <img src="docs/sc-sim-stack.png" width="750"><br>
-  <em>SP 초기화 및 스택 프레임 구성</em>
-</p>
 
 <p align="center">
   <img src="docs/sc-sim-result.png" width="750"><br>
@@ -156,7 +146,13 @@ SH는 half-word 단위이므로 `daddr[1]` 하나로 상·하위 16비트를 구
      endcase
 ```
 
+<p align="center">
+  <img src="docs/sc-troubleshooting.png" width="750"><br>
+  <em>수정 후 — 오프셋에 따라 mem[0]이 0xxx78 → 0x5678 → 0x345678 → 0x12345678로 채워짐</em>
+</p>
+
 **배운 점**
+word align 구조에서**배운 점**
 word align 구조에서 word 주소와 byte 주소를 구분하지 않으면,
 시뮬레이션에서 "값이 들어가긴 하는" 상태로 보여 오류를 놓치기 쉽습니다.
 오프셋을 하나씩 바꿔가며 저장 위치를 전수 확인하는 시나리오를 짰기 때문에 발견할 수 있었습니다.
@@ -189,6 +185,11 @@ AMBA APB 버스를 통해 주변장치 4종(BRAM, GPIO, FND, UART)을 연결한 
 | **MEMORY** | S-type: RAM에 Write / IL-type: RAM에서 Read |
 | **WRITE BACK** | 연산 결과 또는 로드 데이터를 레지스터에 저장 |
 
+<p align="center">
+  <img src="docs/mc-fsm-stage.png" width="750"><br>
+  <em>단계별 수행 동작 — FETCH → DECODE → EXECUTE → MEMORY → WB</em>
+</p>
+
 명령어 타입에 따라 필요한 단계만 거치도록 FSM을 구성했습니다.
 R/I/U/J 타입은 EXECUTE에서 바로 WRITE BACK으로, B/S 타입은 결과를 저장하지 않으므로
 각각 EXECUTE, MEMORY에서 FETCH로 복귀합니다.
@@ -210,6 +211,11 @@ ACCESS에서 `penable`을 올려 실제 전송을 수행합니다.
 | SETUP | `pc_en=1`, `p_addr=addr`, `p_wdata=wdata`, `decode_en=1` |
 | ACCESS | `penable=1`, `pready=1`이면 IDLE 복귀 / `pready=0`이면 wait |
 
+<p align="center">
+  <img src="docs/mc-apb-fsm.png" width="600"><br>
+  <em>APB Master FSM — IDLE / SETUP / ACCESS 상태 전이</em>
+</p>
+
 ### Address Decoder
 
 `paddr` 상위 비트로 6개 Slave 중 하나를 선택합니다.
@@ -225,6 +231,11 @@ ACCESS에서 `penable`을 올려 실제 전송을 수행합니다.
 
 주소 공간을 2단계로 나눈 이유는, 상위 4비트로 메모리 영역과 주변장치 영역을 먼저 구분하고
 주변장치 내부는 `addr[14:12]`로 세분화해 **Slave를 추가할 때 디코더 수정 범위를 최소화**하기 위함입니다.
+
+<p align="center">
+  <img src="docs/mc-apb-decoder.png" width="750"><br>
+  <em>Address Decoder — PADDR 상위 비트로 6개 Slave 중 하나를 선택</em>
+</p>
 
 ### Mux
 
@@ -260,6 +271,11 @@ i = *(volatile unsigned int *) APB_BRAM;            // lw a5, 0(a5)
 
 `volatile`을 붙이는 이유는, 주변장치 레지스터 값이 CPU가 아닌 외부 요인으로도 바뀔 수 있어
 컴파일러가 접근을 최적화로 제거하면 안 되기 때문입니다.
+
+<p align="center">
+  <img src="docs/mc-mmio.png" width="700"><br>
+  <em>Memory Mapped I/O — 주변장치별 주소 배치</em>
+</p>
 
 ## 2.6 검증 시나리오
 
@@ -309,7 +325,13 @@ WB:     case (opcode)
         endcase
 ```
 
+<p align="center">
+  <img src="docs/mc-troubleshooting.png" width="750"><br>
+  <em>수정 전후 제어신호 배치 비교</em>
+</p>
+
 **배운 점**
+버스의 handshake 신호를**배운 점**
 버스의 handshake 신호를 CPU FSM의 상태 전이 조건으로 직접 쓸 때는,
 그 신호가 올라오는 시점과 각 단계에서 필요한 동작의 순서를 함께 따져야 합니다.
 단계별로 "무엇을 언제 assert하는가"를 다시 정리하면서 멀티 사이클 제어의 타이밍을 체감했습니다.
