@@ -34,7 +34,7 @@ RV32I는 32개 범용 레지스터(x0~x31)와 32비트 고정폭 명령어를 �
 ## 1.2 Block Diagram
 
 <p align="center">
-  <img src="docs/sc-blockdiagram.png" width="750"><br>
+  <img src="docs/sc-blockdiagram.png.jpg" width="750"><br>
   <em>Single Cycle Processor 전체 데이터패스</em>
 </p>
 
@@ -152,7 +152,6 @@ SH는 half-word 단위이므로 `daddr[1]` 하나로 상·하위 16비트를 구
 </p>
 
 **배운 점**
-word align 구조에서**배운 점**
 word align 구조에서 word 주소와 byte 주소를 구분하지 않으면,
 시뮬레이션에서 "값이 들어가긴 하는" 상태로 보여 오류를 놓치기 쉽습니다.
 오프셋을 하나씩 바꿔가며 저장 위치를 전수 확인하는 시나리오를 짰기 때문에 발견할 수 있었습니다.
@@ -331,7 +330,6 @@ WB:     case (opcode)
 </p>
 
 **배운 점**
-버스의 handshake 신호를**배운 점**
 버스의 handshake 신호를 CPU FSM의 상태 전이 조건으로 직접 쓸 때는,
 그 신호가 올라오는 시점과 각 단계에서 필요한 동작의 순서를 함께 따져야 합니다.
 단계별로 "무엇을 언제 assert하는가"를 다시 정리하면서 멀티 사이클 제어의 타이밍을 체감했습니다.
@@ -368,8 +366,8 @@ WB:     case (opcode)
 
 ## 📑 발표 자료
 
-- 📄 [RV32I Single Cycle 설계 및 시뮬레이션](docs/slides/윤지원_RISC_V_설계_완성.pdf)
-- 📄 [Multi Cycle CPU & APB BUS 팀 프로젝트](docs/slides/RISC-V_team_project.pdf)
+- 📄 [RV32I Single Cycle 설계 및 시뮬레이션](docs/slides/RISC_V_personal.pdf)
+- 📄 [Multi Cycle CPU & APB BUS 팀 프로젝트](docs/slides/RISC-V%20team_project.pdf)
 
 ---
 
