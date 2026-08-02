@@ -147,7 +147,7 @@ int adder(int a, int b) { return a + b; }
 SH는 half-word 단위이므로 `daddr[1]` 하나로 상·하위 16비트를 구분했습니다.
 
 <p align="center">
-  <img src="docs/sc-troubleshooting.png" width="470"><br>
+  <img src="docs/sc-troubleshooting.png" width="750"><br>
   <em>수정 후 — 오프셋에 따라 mem[0]이 0xxx78 → 0x5678 → 0x345678 → 0x12345678로 채워짐</em>
 </p>
 
@@ -184,11 +184,6 @@ AMBA APB 버스를 통해 주변장치 4종(BRAM, GPIO, FND, UART)을 연결한 
 | **MEMORY** | S-type: RAM에 Write / IL-type: RAM에서 Read |
 | **WRITE BACK** | 연산 결과 또는 로드 데이터를 레지스터에 저장 |
 
-<p align="center">
-  <img src="docs/mc-fsm-stage.png" width="750"><br>
-  <em>단계별 수행 동작 — FETCH → DECODE → EXECUTE → MEMORY → WB</em>
-</p>
-
 명령어 타입에 따라 필요한 단계만 거치도록 FSM을 구성했습니다.
 R/I/U/J 타입은 EXECUTE에서 바로 WRITE BACK으로, B/S 타입은 결과를 저장하지 않으므로
 각각 EXECUTE, MEMORY에서 FETCH로 복귀합니다.
@@ -197,6 +192,14 @@ R/I/U/J 타입은 EXECUTE에서 바로 WRITE BACK으로, B/S 타입은 결과를
 ## 2.3 APB Master *(담당)*
 
 CPU와 APB Slave 사이를 중계하는 모듈로, 세 부분으로 구성했습니다.
+
+<p align="center">
+  <img src="docs/mc-apb-master.png" width="750"><br>
+  <em>APB Master 블록 구조 — CPU 측 인터페이스(addr · wdata · w_req · r_req)를 받아<br>FSM이 전송을 제어하고, Decoder가 Slave를 선택하며, Mux가 응답을 CPU로 되돌린다</em>
+</p>
+
+CPU는 주소와 데이터, 그리고 읽기·쓰기 요청만 던지면 되고,
+APB 프로토콜의 타이밍과 Slave 선택은 이 모듈이 전부 처리합니다.
 
 ### FSM — IDLE → SETUP → ACCESS
 
@@ -211,9 +214,14 @@ ACCESS에서 `penable`을 올려 실제 전송을 수행합니다.
 | ACCESS | `penable=1`, `pready=1`이면 IDLE 복귀 / `pready=0`이면 wait |
 
 <p align="center">
-  <img src="docs/mc-apb-fsm.png" width="600"><br>
-  <em>APB Master FSM — IDLE / SETUP / ACCESS 상태 전이</em>
+  <img src="docs/mc-apb-fsm.png" width="620"><br>
+  <em>APB Master FSM — w_req 또는 r_req가 1이면 SETUP으로 진입하고,<br>ACCESS에서 pready를 기다린 뒤 IDLE로 복귀</em>
 </p>
+
+IDLE에서 주소와 데이터를 0으로 유지하는 이유는, 이전 전송의 값이 버스에 남아
+다음 Slave가 잘못된 주소를 받는 것을 막기 위함입니다.
+ACCESS에서 `pready`를 기다리는 wait 구조 덕분에, 응답이 느린 Slave가 추가되어도
+Master를 수정할 필요가 없습니다.
 
 ### Address Decoder
 
@@ -231,20 +239,10 @@ ACCESS에서 `penable`을 올려 실제 전송을 수행합니다.
 주소 공간을 2단계로 나눈 이유는, 상위 4비트로 메모리 영역과 주변장치 영역을 먼저 구분하고
 주변장치 내부는 `addr[14:12]`로 세분화해 **Slave를 추가할 때 디코더 수정 범위를 최소화**하기 위함입니다.
 
-<p align="center">
-  <img src="docs/mc-apb-decoder.png" width="750"><br>
-  <em>Address Decoder — PADDR 상위 비트로 6개 Slave 중 하나를 선택</em>
-</p>
-
 ### Mux
 
 선택된 Slave의 `prdata` / `pready`를 CPU로 되돌립니다.
 `pready`는 FSM의 ACCESS 종료 조건으로도 사용되어, Slave가 준비될 때까지 wait 상태를 유지합니다.
-
-<p align="center">
-  <img src="docs/mc-apb-master.png" width="750"><br>
-  <em>APB Master 구조 — FSM · Decoder · Mux</em>
-</p>
 
 ## 2.4 RAM (APB Slave) *(담당)*
 
@@ -272,9 +270,12 @@ i = *(volatile unsigned int *) APB_BRAM;            // lw a5, 0(a5)
 컴파일러가 접근을 최적화로 제거하면 안 되기 때문입니다.
 
 <p align="center">
-  <img src="docs/mc-mmio.png" width="700"><br>
-  <em>Memory Mapped I/O — 주변장치별 주소 배치</em>
+  <img src="docs/mc-mmio.png" width="800"><br>
+  <em>Memory Mapped I/O — Slave별 내부 레지스터 배치 (주황색: 담당한 RAM 영역)</em>
 </p>
+
+각 주변장치는 CTL 레지스터로 동작을 설정하고 DATA 레지스터로 값을 주고받는 구조로 통일했습니다.
+덕분에 Slave가 늘어나도 펌웨어 쪽 접근 패턴은 동일하게 유지됩니다.
 
 ## 2.6 검증 시나리오
 
@@ -290,14 +291,17 @@ i = *(volatile unsigned int *) APB_BRAM;            // lw a5, 0(a5)
 | FND Write | `0x2000_3004` | `0x0000_270F` | `pready4=1` |
 | UART Read | `0x2000_4010` | `uart_rx = 'Z'` | `prdata5 = 0x0000_005A` |
 
-최종 통합 테스트는 **UART Echo-back**으로 진행했습니다.
-PC에서 'A'(0x41), 'B'(0x42)를 순차 전송하면 CPU가 RXDATA를 읽어 다시 TXDATA로 되돌려 보내고,
-동시에 그 값이 FND에도 표시되는지 확인해 APB 버스를 통한 다중 주변장치 동시 제어를 검증했습니다.
+담당한 RAM은 Write 후 같은 주소를 Read해 값이 그대로 돌아오는지를 기준으로 검증했습니다.
+`wreq`가 올라가면 SETUP에서 `psel0`이 assert되고, ACCESS에서 `penable`·`pwrite`가 1이 되며,
+`pready0` 응답으로 전송이 마무리되는 순서를 파형에서 확인했습니다.
 
 <p align="center">
-  <img src="docs/mc-sim-uart.png" width="750"><br>
-  <em>UART Echo-back 시뮬레이션</em>
+  <img src="docs/mc-sim-ram.png" width="750"><br>
+  <em>RAM Write / Read 검증 — SETUP → ACCESS → pready 응답 순서 확인</em>
 </p>
+
+이후 팀 차원의 최종 통합 테스트에서 UART, FND 등 나머지 주변장치까지 함께 동작시켜
+APB 버스를 통한 다중 주변장치 제어를 확인했습니다.
 
 ## 2.7 Troubleshooting — MEMORY 단계에서 WB로 조기 진입
 
@@ -323,11 +327,6 @@ WB:     case (opcode)
           `IL_TYPE: begin rf_we = 1'b1; rfwd_src = 3'b001; end
         endcase
 ```
-
-<p align="center">
-  <img src="docs/mc-troubleshooting.png" width="750"><br>
-  <em>수정 전후 제어신호 배치 비교</em>
-</p>
 
 **배운 점**
 버스의 handshake 신호를 CPU FSM의 상태 전이 조건으로 직접 쓸 때는,
@@ -367,7 +366,7 @@ WB:     case (opcode)
 ## 📑 발표 자료
 
 - 📄 [RV32I Single Cycle 설계 및 시뮬레이션](docs/slides/RISC_V_personal.pdf)
-- 📄 [Multi Cycle CPU & APB BUS 팀 프로젝트](docs/slides/RISC-V%20team_project.pdf)
+- 📄 [Multi Cycle CPU & APB BUS 팀 프로젝트](docs/slides/RISC-V_team_project.pdf)
 
 ---
 
