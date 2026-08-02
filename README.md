@@ -77,7 +77,7 @@ opcode를 기준으로 9개 타입에 대한 제어신호를 생성합니다.
 정반대로 나오도록 구성해, 부호 처리 오류가 있으면 반드시 드러나게 했습니다.
 
 <p align="center">
-  <img src="docs/sc-sim-btype.png" width="750"><br>
+  <img src="docs/sc-sim-btype.png" width="400"><br>
   <em>B-type 시뮬레이션 — 분기 성공/실패에 따른 PC 변화</em>
 </p>
 
